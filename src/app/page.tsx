@@ -16,11 +16,8 @@ import {
   AlertCircle,
   Sparkles,
 } from 'lucide-react';
-import {
-  useProductStore,
-  selectPaginatedProducts,
-  selectFilteredProducts,
-} from '@/store/useProductStore';
+import { useProductStore } from '@/store/useProductStore';
+import { productService } from '@/services/productService';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductSkeleton } from '@/components/ProductSkeleton';
 import { ProductFilters } from '@/components/ProductFilters';
@@ -35,8 +32,20 @@ export default function CatalogPage() {
   const error = useProductStore((state) => state.error);
   const resetFilters = useProductStore((state) => state.resetFilters);
 
-  const paginatedProducts = useProductStore(selectPaginatedProducts);
-  const filteredProducts = useProductStore(selectFilteredProducts);
+  const products = useProductStore((state) => state.products);
+  const filterCriteria = useProductStore((state) => state.filterCriteria);
+  const currentPage = useProductStore((state) => state.currentPage);
+  const pageSize = useProductStore((state) => state.pageSize);
+
+  // Derivação memoizada segura contra re-renders e hydration mismatch no SSR
+  const filteredProducts = React.useMemo(() => {
+    return productService.filterAndSort(products, filterCriteria);
+  }, [products, filterCriteria]);
+
+  const paginatedProducts = React.useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return filteredProducts.slice(startIndex, startIndex + pageSize);
+  }, [filteredProducts, currentPage, pageSize]);
 
   // Carregamento inicial com simulação de latência assíncrona
   useEffect(() => {
@@ -154,7 +163,7 @@ export default function CatalogPage() {
           <ProductSkeleton count={6} />
         ) : filteredProducts.length === 0 ? (
           /* Empty State Amigável */
-          <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-zinc-300 bg-white p-12 text-center shadow-xs dark:border-zinc-800 dark:bg-zinc-900/60">
+          <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-zinc-300 bg-white p-12 text-center shadow-sm dark:border-zinc-800 dark:bg-zinc-900/60">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
               <PackageSearch className="h-8 w-8" />
             </div>

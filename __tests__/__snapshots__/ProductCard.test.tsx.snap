@@ -7,7 +7,7 @@ exports[`ProductCard Component deve corresponder ao snapshot estrutural 1`] = `
     data-testid="product-card-suz-test-001"
   >
     <div
-      class="relative aspect-4/3 w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800"
+      class="relative h-56 w-full aspect-[4/3] overflow-hidden bg-zinc-100 dark:bg-zinc-800"
     >
       <div
         class="absolute inset-0 animate-pulse bg-zinc-200 dark:bg-zinc-700"
@@ -59,7 +59,7 @@ exports[`ProductCard Component deve corresponder ao snapshot estrutural 1`] = `
         class="absolute top-3 right-3"
       >
         <span
-          class="inline-flex items-center gap-1 rounded-full bg-emerald-500/90 px-2 py-0.5 text-[11px] font-medium text-white shadow-xs backdrop-blur-xs"
+          class="inline-flex items-center gap-1 rounded-full bg-emerald-500/90 px-2 py-0.5 text-[11px] font-medium text-white shadow-sm backdrop-blur-sm"
         >
           <svg
             aria-hidden="true"

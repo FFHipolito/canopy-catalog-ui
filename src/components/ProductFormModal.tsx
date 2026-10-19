@@ -221,7 +221,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
               type="text"
               placeholder="Ex: Celulose Kraft Eucalipto Bleached"
               {...register('name')}
-              className={`mt-1.5 w-full rounded-xl border bg-zinc-50/70 px-3.5 py-2.5 text-sm text-zinc-900 transition-colors focus:bg-white focus:outline-hidden dark:bg-zinc-800/70 dark:text-zinc-100 ${
+              className={`mt-1.5 w-full rounded-xl border bg-zinc-50/70 px-3.5 py-2.5 text-sm text-zinc-900 transition-colors focus:bg-white focus:outline-none dark:bg-zinc-800/70 dark:text-zinc-100 ${
                 errors.name
                   ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:border-red-800'
                   : 'border-zinc-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700'
@@ -244,7 +244,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
               <select
                 id="product-category"
                 {...register('category')}
-                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50/70 px-3 py-2.5 text-sm text-zinc-900 focus:border-emerald-500 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-zinc-100"
+                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50/70 px-3 py-2.5 text-sm text-zinc-900 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-zinc-100"
               >
                 <option value="Celulose">Celulose</option>
                 <option value="Papéis de Imprimir e Escrever">Papéis de Imprimir e Escrever</option>
@@ -271,7 +271,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
                 min="0"
                 placeholder="Ex: 3450.00"
                 {...register('price', { valueAsNumber: true })}
-                className={`mt-1.5 w-full rounded-xl border bg-zinc-50/70 px-3.5 py-2.5 text-sm text-zinc-900 transition-colors focus:bg-white focus:outline-hidden dark:bg-zinc-800/70 dark:text-zinc-100 ${
+                className={`mt-1.5 w-full rounded-xl border bg-zinc-50/70 px-3.5 py-2.5 text-sm text-zinc-900 transition-colors focus:bg-white focus:outline-none dark:bg-zinc-800/70 dark:text-zinc-100 ${
                   errors.price
                     ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:border-red-800'
                     : 'border-zinc-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700'
@@ -299,7 +299,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
                 type="url"
                 placeholder="https://images.unsplash.com/photo-..."
                 {...register('imageUrl')}
-                className={`w-full rounded-xl border bg-zinc-50/70 py-2.5 pr-3.5 pl-10 text-sm text-zinc-900 transition-colors focus:bg-white focus:outline-hidden dark:bg-zinc-800/70 dark:text-zinc-100 ${
+                className={`w-full rounded-xl border bg-zinc-50/70 py-2.5 pr-3.5 pl-10 text-sm text-zinc-900 transition-colors focus:bg-white focus:outline-none dark:bg-zinc-800/70 dark:text-zinc-100 ${
                   errors.imageUrl
                     ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:border-red-800'
                     : 'border-zinc-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700'
@@ -323,7 +323,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({ isOpen, onCl
               rows={3}
               placeholder="Descreva as características técnicas, aplicações e sustentabilidade do produto..."
               {...register('description')}
-              className={`mt-1.5 w-full rounded-xl border bg-zinc-50/70 p-3 text-sm text-zinc-900 transition-colors focus:bg-white focus:outline-hidden dark:bg-zinc-800/70 dark:text-zinc-100 ${
+              className={`mt-1.5 w-full rounded-xl border bg-zinc-50/70 p-3 text-sm text-zinc-900 transition-colors focus:bg-white focus:outline-none dark:bg-zinc-800/70 dark:text-zinc-100 ${
                 errors.description
                   ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:border-red-800'
                   : 'border-zinc-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700'

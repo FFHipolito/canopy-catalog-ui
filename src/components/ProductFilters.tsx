@@ -103,7 +103,7 @@ export const ProductFilters: React.FC = () => {
   return (
     <section
       aria-label="Filtros e ordenação de produtos"
-      className="mb-8 rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900/80"
+      className="mb-8 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/80"
     >
       {/* Linha Superior: Busca Textual + Ordenação + Reset */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -122,7 +122,7 @@ export const ProductFilters: React.FC = () => {
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
             placeholder="Buscar por nome, SKU ou descrição..."
-            className="w-full rounded-xl border border-zinc-200 bg-zinc-50/80 py-2.5 pr-10 pl-10 text-sm text-zinc-900 transition-colors placeholder:text-zinc-400 focus:border-emerald-500 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-emerald-400 dark:focus:bg-zinc-800"
+            className="w-full rounded-xl border border-zinc-200 bg-zinc-50/80 py-2.5 pr-10 pl-10 text-sm text-zinc-900 transition-colors placeholder:text-zinc-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-emerald-400 dark:focus:bg-zinc-800"
           />
           {localSearch && (
             <button
@@ -149,7 +149,7 @@ export const ProductFilters: React.FC = () => {
               id="sort-select"
               value={filterCriteria.sort}
               onChange={(e) => setSort(e.target.value as SortOption)}
-              className="appearance-none rounded-xl border border-zinc-200 bg-zinc-50/80 py-2.5 pr-8 pl-9 text-sm font-medium text-zinc-800 transition-colors focus:border-emerald-500 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-zinc-200 dark:focus:border-emerald-400"
+              className="appearance-none rounded-xl border border-zinc-200 bg-zinc-50/80 py-2.5 pr-8 pl-9 text-sm font-medium text-zinc-800 transition-colors focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-zinc-200 dark:focus:border-emerald-400"
             >
               {SORT_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -190,7 +190,7 @@ export const ProductFilters: React.FC = () => {
               onClick={() => setCategory(cat)}
               className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
                 isSelected
-                  ? 'bg-emerald-600 text-white shadow-xs dark:bg-emerald-500'
+                  ? 'bg-emerald-600 text-white shadow-sm dark:bg-emerald-500'
                   : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700'
               }`}
             >
@@ -215,7 +215,7 @@ export const ProductFilters: React.FC = () => {
               placeholder={`Mín (${minPriceBound})`}
               value={minPriceInput}
               onChange={(e) => setMinPriceInput(e.target.value)}
-              className="w-24 rounded-lg border border-zinc-200 bg-zinc-50 px-2.5 py-1.5 text-xs text-zinc-900 focus:border-emerald-500 focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+              className="w-24 rounded-lg border border-zinc-200 bg-zinc-50 px-2.5 py-1.5 text-xs text-zinc-900 focus:border-emerald-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
             />
             <span className="text-xs text-zinc-400">até</span>
             <input
@@ -224,7 +224,7 @@ export const ProductFilters: React.FC = () => {
               placeholder={`Máx (${maxPriceBound})`}
               value={maxPriceInput}
               onChange={(e) => setMaxPriceInput(e.target.value)}
-              className="w-24 rounded-lg border border-zinc-200 bg-zinc-50 px-2.5 py-1.5 text-xs text-zinc-900 focus:border-emerald-500 focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+              className="w-24 rounded-lg border border-zinc-200 bg-zinc-50 px-2.5 py-1.5 text-xs text-zinc-900 focus:border-emerald-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
             />
             <button
               type="submit"

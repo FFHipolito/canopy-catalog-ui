@@ -15,10 +15,10 @@ export const ProductSkeletonItem: React.FC = () => {
   return (
     <div
       data-testid="product-skeleton-item"
-      className="flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900/90"
+      className="flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900/90"
     >
       {/* Container de Imagem Simulado */}
-      <div className="relative aspect-4/3 w-full animate-pulse bg-zinc-200 dark:bg-zinc-800">
+      <div className="relative h-56 w-full aspect-[4/3] animate-pulse bg-zinc-200 dark:bg-zinc-800">
         <div className="absolute top-3 left-3 h-6 w-24 rounded-full bg-zinc-300 dark:bg-zinc-700" />
         <div className="absolute top-3 right-3 h-5 w-16 rounded-full bg-zinc-300 dark:bg-zinc-700" />
       </div>

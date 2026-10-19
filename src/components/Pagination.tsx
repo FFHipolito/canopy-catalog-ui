@@ -9,15 +9,33 @@
 
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useProductStore, selectPaginationInfo } from '@/store/useProductStore';
+import { useProductStore } from '@/store/useProductStore';
+import { productService } from '@/services/productService';
 
 export const Pagination: React.FC = () => {
-  const paginationInfo = useProductStore(selectPaginationInfo);
+  const products = useProductStore((state) => state.products);
+  const filterCriteria = useProductStore((state) => state.filterCriteria);
+  const currentPage = useProductStore((state) => state.currentPage);
+  const pageSize = useProductStore((state) => state.pageSize);
   const setCurrentPage = useProductStore((state) => state.setCurrentPage);
   const setPageSize = useProductStore((state) => state.setPageSize);
 
-  const { currentPage, totalPages, totalItems, pageSize, hasNextPage, hasPrevPage } =
-    paginationInfo;
+  const paginationInfo = React.useMemo(() => {
+    const totalItems = productService.filterAndSort(products, filterCriteria).length;
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+    const validCurrentPage = Math.min(currentPage, totalPages);
+
+    return {
+      currentPage: validCurrentPage,
+      pageSize,
+      totalItems,
+      totalPages,
+      hasNextPage: validCurrentPage < totalPages,
+      hasPrevPage: validCurrentPage > 1,
+    };
+  }, [products, filterCriteria, currentPage, pageSize]);
+
+  const { totalPages, totalItems, hasNextPage, hasPrevPage } = paginationInfo;
 
   // Não renderiza nada se não houver itens
   if (totalItems === 0) return null;

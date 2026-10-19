@@ -175,36 +175,97 @@ export const createProductStore = (service: IProductService = productService) =>
 export const useProductStore = createProductStore();
 
 /* =========================================================================
-   SELETORES COMPUTADOS (DERIVED SELECTORS)
-   Evitam redundância no estado base e calculam dados derivados sob demanda.
+   SELETORES COMPUTADOS COM CACHE REFERENCIAL (MEMOIZED DERIVED SELECTORS)
+   Evitam redundância no estado base e garantem estabilidade de referência de
+   memória para o useSyncExternalStore / getServerSnapshot do React 19 e SSR.
    ========================================================================= */
+
+let lastFilteredProductsInput: Product[] | null = null;
+let lastFilteredCriteriaInput: ProductFilterCriteria | null = null;
+let cachedFilteredProducts: Product[] = [];
 
 /**
  * Seletor que deriva a lista completa de produtos filtrados e ordenados.
- * Reutiliza a lógica pura de filtragem desacoplada do productService.
+ * Utiliza cache referencial para retornar a mesma referência quando os dados não mudarem.
  */
 export const selectFilteredProducts = (state: ProductStoreState): Product[] => {
-  return productService.filterAndSort(state.products, state.filterCriteria);
+  if (
+    state.products === lastFilteredProductsInput &&
+    state.filterCriteria === lastFilteredCriteriaInput
+  ) {
+    return cachedFilteredProducts;
+  }
+
+  lastFilteredProductsInput = state.products;
+  lastFilteredCriteriaInput = state.filterCriteria;
+  cachedFilteredProducts = productService.filterAndSort(state.products, state.filterCriteria);
+  return cachedFilteredProducts;
 };
+
+let lastPaginatedSource: Product[] | null = null;
+let lastPaginatedPage: number | null = null;
+let lastPaginatedSize: number | null = null;
+let cachedPaginatedProducts: Product[] = [];
 
 /**
  * Seletor que fatia os produtos filtrados correspondentes à página atual.
+ * Cacheia o array resultante para evitar loops de renderização no getServerSnapshot.
  */
 export const selectPaginatedProducts = (state: ProductStoreState): Product[] => {
   const filtered = selectFilteredProducts(state);
+
+  if (
+    filtered === lastPaginatedSource &&
+    state.currentPage === lastPaginatedPage &&
+    state.pageSize === lastPaginatedSize
+  ) {
+    return cachedPaginatedProducts;
+  }
+
+  lastPaginatedSource = filtered;
+  lastPaginatedPage = state.currentPage;
+  lastPaginatedSize = state.pageSize;
+
   const startIndex = (state.currentPage - 1) * state.pageSize;
-  return filtered.slice(startIndex, startIndex + state.pageSize);
+  cachedPaginatedProducts = filtered.slice(startIndex, startIndex + state.pageSize);
+  return cachedPaginatedProducts;
+};
+
+let lastPaginationInfoSource: Product[] | null = null;
+let lastPaginationInfoPage: number | null = null;
+let lastPaginationInfoSize: number | null = null;
+let cachedPaginationInfo: PaginationInfo = {
+  currentPage: 1,
+  pageSize: DEFAULT_PAGE_SIZE,
+  totalItems: 0,
+  totalPages: 1,
+  hasNextPage: false,
+  hasPrevPage: false,
 };
 
 /**
  * Seletor que calcula informações de paginação derivadas (total de páginas, contagens, etc.).
  */
 export const selectPaginationInfo = (state: ProductStoreState): PaginationInfo => {
-  const totalItems = selectFilteredProducts(state).length;
+  const filtered = selectFilteredProducts(state);
+
+  if (
+    filtered === lastPaginationInfoSource &&
+    state.currentPage === lastPaginationInfoPage &&
+    state.pageSize === lastPaginationInfoSize
+  ) {
+    return cachedPaginationInfo;
+  }
+
+  const totalItems = filtered.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / state.pageSize));
   const currentPage = Math.min(state.currentPage, totalPages);
 
-  return {
+  lastPaginationInfoSource = filtered;
+  lastPaginationInfoPage = state.currentPage;
+  lastPaginationInfoSize = state.pageSize;
+
+  cachedPaginationInfo = {
     currentPage,
     pageSize: state.pageSize,
     totalItems,
@@ -212,21 +273,35 @@ export const selectPaginationInfo = (state: ProductStoreState): PaginationInfo =
     hasNextPage: currentPage < totalPages,
     hasPrevPage: currentPage > 1,
   };
+
+  return cachedPaginationInfo;
 };
+
+let lastBoundsProducts: Product[] | null = null;
+let cachedPriceBounds = { min: 0, max: 10000 };
 
 /**
  * Seletor que computa limites de preço (menor e maior valor) a partir de todo o acervo.
- * Útil para configurar limites visuais de inputs e sliders.
  */
 export const selectPriceRangeBounds = (state: ProductStoreState): { min: number; max: number } => {
-  if (state.products.length === 0) {
-    return { min: 0, max: 10000 };
+  if (state.products === lastBoundsProducts) {
+    return cachedPriceBounds;
   }
+
+  lastBoundsProducts = state.products;
+
+  if (state.products.length === 0) {
+    cachedPriceBounds = { min: 0, max: 10000 };
+    return cachedPriceBounds;
+  }
+
   const prices = state.products.map((p) => p.price);
-  return {
+  cachedPriceBounds = {
     min: Math.floor(Math.min(...prices)),
     max: Math.ceil(Math.max(...prices)),
   };
+
+  return cachedPriceBounds;
 };
 
 /**

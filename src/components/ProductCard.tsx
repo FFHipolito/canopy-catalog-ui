@@ -69,7 +69,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
       className="group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-900/90 dark:hover:border-emerald-600"
     >
       {/* Container de Imagem */}
-      <div className="relative aspect-4/3 w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+      <div className="relative h-56 w-full aspect-[4/3] overflow-hidden bg-zinc-100 dark:bg-zinc-800">
         {!imageError && product.imageUrl ? (
           <>
             {isImageLoading && (
@@ -112,14 +112,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
         {/* Badge de Disponibilidade */}
         {product.inStock !== false ? (
           <div className="absolute top-3 right-3">
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/90 px-2 py-0.5 text-[11px] font-medium text-white shadow-xs backdrop-blur-xs">
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/90 px-2 py-0.5 text-[11px] font-medium text-white shadow-sm backdrop-blur-sm">
               <CheckCircle2 className="h-3 w-3" />
               Disponível
             </span>
           </div>
         ) : (
           <div className="absolute top-3 right-3">
-            <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/90 px-2 py-0.5 text-[11px] font-medium text-white shadow-xs backdrop-blur-xs">
+            <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/90 px-2 py-0.5 text-[11px] font-medium text-white shadow-sm backdrop-blur-sm">
               <AlertCircle className="h-3 w-3" />
               Sob Demanda
             </span>
