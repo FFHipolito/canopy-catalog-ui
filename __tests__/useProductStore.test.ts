@@ -39,6 +39,14 @@ describe('useProductStore & Computed Selectors', () => {
         id: 'new-id-999',
         createdAt: new Date().toISOString(),
       })),
+      updateProduct: jest.fn().mockImplementation(async (id, updates) => {
+        const found = mockProducts.find((p) => p.id === id);
+        return {
+          ...(found || mockProducts[0]),
+          ...updates,
+          id,
+        };
+      }),
       filterAndSort: jest.fn().mockImplementation((prods, criteria) => {
         let result = [...prods];
         if (criteria.searchQuery) {
@@ -78,6 +86,23 @@ describe('useProductStore & Computed Selectors', () => {
     expect(products).toHaveLength(3);
     expect(products[0].name).toBe('Novo Bioplástico Sustentável');
     expect(store.getState().currentPage).toBe(1);
+  });
+
+  it('deve atualizar um produto existente na store', async () => {
+    const store = createProductStore(mockService);
+    await store.getState().fetchProducts();
+
+    const updated = await store.getState().updateProduct('prod-1', {
+      name: 'Celulose Kraft Modificada',
+      price: 3800,
+    });
+
+    expect(updated.name).toBe('Celulose Kraft Modificada');
+    expect(updated.price).toBe(3800);
+
+    const productInStore = store.getState().products.find((p) => p.id === 'prod-1');
+    expect(productInStore?.name).toBe('Celulose Kraft Modificada');
+    expect(productInStore?.price).toBe(3800);
   });
 
   it('deve calcular corretamente a paginação através do seletor selectPaginationInfo', async () => {

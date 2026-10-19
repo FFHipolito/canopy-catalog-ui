@@ -40,6 +40,7 @@ export interface ProductStoreState {
   // Ações de Carregamento e Mutação
   fetchProducts: () => Promise<void>;
   addProduct: (input: CreateProductInput) => Promise<Product>;
+  updateProduct: (id: string, updates: Partial<CreateProductInput>) => Promise<Product>;
 
   // Ações de Filtro e Busca
   setSearchQuery: (query: string) => void;
@@ -111,6 +112,23 @@ export const createProductStore = (service: IProductService = productService) =>
         return createdProduct;
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Erro ao cadastrar produto';
+        set({ isLoading: false, error: message });
+        throw err;
+      }
+    },
+
+    // Ação assíncrona: Atualizar produto existente
+    updateProduct: async (id: string, updates: Partial<CreateProductInput>): Promise<Product> => {
+      set({ isLoading: true, error: null });
+      try {
+        const updated = await service.updateProduct(id, updates);
+        set((state) => ({
+          products: state.products.map((p) => (p.id === id ? updated : p)),
+          isLoading: false,
+        }));
+        return updated;
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Erro ao atualizar produto';
         set({ isLoading: false, error: message });
         throw err;
       }

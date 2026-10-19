@@ -11,11 +11,13 @@ import React, { useEffect, useState } from 'react';
 import {
   Plus,
   TreePine,
-  RefreshCw,
+  Sun,
+  Moon,
   PackageSearch,
   AlertCircle,
   Sparkles,
 } from 'lucide-react';
+import { Product } from '@/types/product';
 import { useProductStore } from '@/store/useProductStore';
 import { productService } from '@/services/productService';
 import { ProductCard } from '@/components/ProductCard';
@@ -26,6 +28,16 @@ import { ProductFormModal } from '@/components/ProductFormModal';
 
 export default function CatalogPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [productToEdit, setProductToEdit] = useState<Product | null>(null);
+
+  // Inicializa tema limpo e suave (padrão claro ou escolha do usuário em localStorage)
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('canopy_theme');
+      if (saved === 'dark') return 'dark';
+    }
+    return 'light';
+  });
 
   const fetchProducts = useProductStore((state) => state.fetchProducts);
   const isLoading = useProductStore((state) => state.isLoading);
@@ -36,6 +48,23 @@ export default function CatalogPage() {
   const filterCriteria = useProductStore((state) => state.filterCriteria);
   const currentPage = useProductStore((state) => state.currentPage);
   const pageSize = useProductStore((state) => state.pageSize);
+
+  // Sincroniza a classe dark no elemento raiz HTML
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(nextTheme);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('canopy_theme', nextTheme);
+    }
+  };
 
   // Derivação memoizada segura contra re-renders e hydration mismatch no SSR
   const filteredProducts = React.useMemo(() => {
@@ -52,10 +81,20 @@ export default function CatalogPage() {
     fetchProducts();
   }, [fetchProducts]);
 
+  const handleOpenNewProduct = () => {
+    setProductToEdit(null);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditProduct = (prod?: Product) => {
+    setProductToEdit(prod || products[0] || null);
+    setIsModalOpen(true);
+  };
+
   return (
-    <div className="min-h-screen bg-zinc-50/70 text-zinc-900 transition-colors dark:bg-black dark:text-zinc-100">
+    <div className="min-h-screen bg-slate-50/80 text-zinc-900 transition-colors duration-200 dark:bg-zinc-950 dark:text-zinc-100">
       {/* Barra de Topo Corporativa */}
-      <header className="sticky top-0 z-30 border-b border-zinc-200/80 bg-white/80 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-950/80">
+      <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white/95 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/95">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
           {/* Logo e Nome da Plataforma */}
           <div className="flex items-center gap-3">
@@ -78,21 +117,31 @@ export default function CatalogPage() {
           </div>
 
           {/* Ações da Barra de Topo */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
+            {/* Botão de Alternância de Tema Claro / Escuro */}
             <button
               type="button"
-              onClick={() => fetchProducts()}
-              title="Recarregar catálogo"
-              disabled={isLoading}
-              className="inline-flex h-9 items-center justify-center rounded-xl border border-zinc-200 bg-white px-3 text-xs font-semibold text-zinc-700 transition-colors hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              onClick={toggleTheme}
+              title={theme === 'dark' ? 'Mudar para Modo Claro' : 'Mudar para Modo Escuro'}
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-3 text-xs font-semibold text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
             >
-              <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-              <span className="ml-1.5 hidden sm:inline">Atualizar</span>
+              {theme === 'dark' ? (
+                <>
+                  <Sun className="h-4 w-4 text-amber-400" />
+                  <span className="hidden sm:inline">Modo Claro</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="h-4 w-4 text-zinc-600" />
+                  <span className="hidden sm:inline">Modo Escuro</span>
+                </>
+              )}
             </button>
 
+            {/* Botão Cadastrar Novo Produto */}
             <button
               type="button"
-              onClick={() => setIsModalOpen(true)}
+              onClick={handleOpenNewProduct}
               className="inline-flex h-9 items-center gap-2 rounded-xl bg-emerald-600 px-4 text-xs font-bold text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 hover:shadow-lg dark:bg-emerald-500 dark:hover:bg-emerald-600"
             >
               <Plus className="h-4 w-4" />
@@ -104,31 +153,20 @@ export default function CatalogPage() {
 
       {/* Conteúdo Principal */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Banner de Boas-Vindas e Métricas Rápidas */}
+        {/* Banner de Boas-Vindas */}
         <section className="mb-8 rounded-3xl border border-zinc-200/80 bg-gradient-to-r from-emerald-900 via-teal-900 to-zinc-900 p-6 text-white shadow-xl sm:p-8 dark:border-zinc-800">
-          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
-            <div className="max-w-2xl">
-              <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-300 backdrop-blur-md">
-                <Sparkles className="h-3.5 w-3.5" />
-                Catálogo de Soluções Sustentáveis
-              </div>
-              <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">
-                Catálogo Corporativo de Produtos
-              </h1>
-              <p className="mt-2 text-sm text-zinc-300">
-                Explore a linha completa de celulose solúvel, papéis termossensíveis, embalagens
-                biodegradáveis e inovação em bioprodutos derivados do eucalipto.
-              </p>
+          <div className="max-w-3xl">
+            <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-300 backdrop-blur-md">
+              <Sparkles className="h-3.5 w-3.5" />
+              Catálogo de Soluções Sustentáveis
             </div>
-
-            <div className="flex shrink-0 items-center gap-4">
-              <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-md">
-                <div className="text-2xl font-black text-emerald-300">
-                  {filteredProducts.length}
-                </div>
-                <div className="text-xs text-zinc-300">Itens Filtrados</div>
-              </div>
-            </div>
+            <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">
+              Catálogo Corporativo de Produtos
+            </h1>
+            <p className="mt-2 text-sm text-zinc-200">
+              Explore a linha completa de celulose solúvel, papéis termossensíveis, embalagens
+              biodegradáveis e inovação em bioprodutos industriais de alta performance.
+            </p>
           </div>
         </section>
 
@@ -184,7 +222,7 @@ export default function CatalogPage() {
               </button>
               <button
                 type="button"
-                onClick={() => setIsModalOpen(true)}
+                onClick={handleOpenNewProduct}
                 className="rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700 dark:bg-emerald-500"
               >
                 Cadastrar Novo Produto
@@ -203,6 +241,7 @@ export default function CatalogPage() {
                   key={product.id}
                   product={product}
                   priority={idx < 3}
+                  onEdit={handleOpenEditProduct}
                 />
               ))}
             </div>
@@ -213,10 +252,11 @@ export default function CatalogPage() {
         )}
       </main>
 
-      {/* Modal de Cadastro */}
+      {/* Modal de Cadastro e Atualização */}
       <ProductFormModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        productToEdit={productToEdit}
       />
     </div>
   );

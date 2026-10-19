@@ -55,4 +55,30 @@ describe('ProductCard Component', () => {
 
     expect(screen.getByText('Imagem indisponível')).toBeInTheDocument();
   });
+
+  // 4. Teste de expansão da descrição ao clicar em 'mais'
+  it('deve alternar entre mais e menos ao clicar no botão de descrição', () => {
+    render(<ProductCard product={mockProduct} />);
+
+    const moreButton = screen.getByRole('button', { name: /mais/i });
+    expect(moreButton).toBeInTheDocument();
+
+    fireEvent.click(moreButton);
+    expect(screen.getByRole('button', { name: /menos/i })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /menos/i }));
+    expect(screen.getByRole('button', { name: /mais/i })).toBeInTheDocument();
+  });
+
+  // 5. Teste de clique no botão Atualizar
+  it('deve disparar onEdit ao clicar no botão Atualizar do card', () => {
+    const handleEdit = jest.fn();
+    render(<ProductCard product={mockProduct} onEdit={handleEdit} />);
+
+    const editButton = screen.getByRole('button', { name: /Atualizar/i });
+    fireEvent.click(editButton);
+
+    expect(handleEdit).toHaveBeenCalledTimes(1);
+    expect(handleEdit).toHaveBeenCalledWith(mockProduct);
+  });
 });

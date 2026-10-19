@@ -5,6 +5,7 @@ export interface IProductService {
   fetchProducts(delayMs?: number): Promise<Product[]>;
   fetchProductById(id: string, delayMs?: number): Promise<Product | null>;
   createProduct(input: CreateProductInput, delayMs?: number): Promise<Product>;
+  updateProduct(id: string, updates: Partial<CreateProductInput>, delayMs?: number): Promise<Product>;
   filterAndSort(products: Product[], criteria: ProductFilterCriteria): Product[];
 }
 
@@ -42,6 +43,28 @@ export class ProductService implements IProductService {
 
     this.products = [newProduct, ...this.products];
     return JSON.parse(JSON.stringify(newProduct));
+  }
+
+  async updateProduct(
+    id: string,
+    updates: Partial<CreateProductInput>,
+    delayMs: number = this.defaultDelay
+  ): Promise<Product> {
+    await this.simulateLatency(delayMs);
+
+    const index = this.products.findIndex((p) => p.id === id);
+    if (index === -1) {
+      throw new Error(`Produto com ID "${id}" não encontrado para atualização.`);
+    }
+
+    const updatedProduct: Product = {
+      ...this.products[index],
+      ...updates,
+      price: updates.price !== undefined ? Number(updates.price) : this.products[index].price,
+    };
+
+    this.products[index] = updatedProduct;
+    return JSON.parse(JSON.stringify(updatedProduct));
   }
 
   filterAndSort(products: Product[], criteria: ProductFilterCriteria): Product[] {

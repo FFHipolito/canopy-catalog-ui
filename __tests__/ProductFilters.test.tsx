@@ -56,8 +56,8 @@ describe('ProductFilters Component', () => {
     });
   });
 
-  it('deve renderizar a barra de busca, categorias e inputs de preço', () => {
-    render(<ProductFilters />);
+  it('deve renderizar a barra de busca, categorias e inputs de preço quando expandido', () => {
+    render(<ProductFilters defaultExpanded={true} />);
 
     expect(
       screen.getByPlaceholderText(/Buscar por nome, SKU ou descrição/i)
@@ -66,6 +66,18 @@ describe('ProductFilters Component', () => {
     expect(screen.getByText('Celulose')).toBeInTheDocument();
     expect(screen.getByText('Embalagens e Papelcartão')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Filtrar/i })).toBeInTheDocument();
+  });
+
+  it('deve abrir e fechar o painel recolhível ao clicar no botão Filtros', async () => {
+    const user = userEvent.setup();
+    render(<ProductFilters defaultExpanded={false} />);
+
+    expect(screen.queryByText('Todas')).not.toBeInTheDocument();
+
+    const toggleButton = screen.getByRole('button', { name: /Filtros/i });
+    await user.click(toggleButton);
+
+    expect(screen.getByText('Todas')).toBeInTheDocument();
   });
 
   // Requisito obrigatório: Teste garantindo que a filtragem por nome atualiza os elementos renderizados
@@ -89,7 +101,7 @@ describe('ProductFilters Component', () => {
 
   it('deve filtrar produtos pela categoria selecionada', async () => {
     const user = userEvent.setup();
-    render(<ProductFilters />);
+    render(<ProductFilters defaultExpanded={true} />);
 
     const categoryButton = screen.getByRole('button', { name: 'Celulose' });
     await user.click(categoryButton);
@@ -101,7 +113,7 @@ describe('ProductFilters Component', () => {
 
   it('deve restaurar todos os filtros ao clicar no botão Limpar', async () => {
     const user = userEvent.setup();
-    render(<ProductFilters />);
+    render(<ProductFilters defaultExpanded={true} />);
 
     // Aplica um filtro de categoria
     const categoryButton = screen.getByRole('button', { name: 'Celulose' });

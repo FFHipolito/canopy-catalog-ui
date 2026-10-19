@@ -16,6 +16,14 @@ export const metadata: Metadata = {
   title: "Canopy Catalog | Catálogo de Produtos e Materiais Sustentáveis",
   description:
     "Plataforma de alta performance para consulta, filtragem e gerenciamento de catálogo de celulose, papéis e bioprodutos industriais.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "32x32" },
+    ],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

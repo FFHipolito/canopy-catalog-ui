@@ -69,3 +69,14 @@ Este documento explica de forma simples e direta o **porquê** de cada tecnologi
   - Testam o comportamento real: tentar salvar em branco exibe os erros; tentar salvar com preço negativo bloqueia; preencher corretamente adiciona o produto.
 - **Testes de Filtros:**
   - Garantem que a busca textual com debounce e os botões de categoria e reset filtram corretamente a lista exibida.
+
+---
+
+## 8. Identidade Visual e Experiência do Usuário (UX)
+- **Alternador de Tema (Modo Claro / Modo Escuro):**
+  - Permite que o usuário escolha entre o Modo Claro (padrão amigável e suave com fundo claro) e o Modo Escuro com um simples clique no topo. A escolha fica salva no navegador.
+- **Descrição com "mais" / "menos":**
+  - Mantém o alinhamento visual dos cards em 2 linhas, permitindo que o usuário clique em "mais" para ler o texto completo sem sair da página.
+- **Ícone da Árvore (Favicon):**
+  - O ícone padrão do Next.js na aba do navegador foi substituído pela árvore Canopy em formato SVG e ICO, trazendo acabamento profissional e identidade visual completa.
+

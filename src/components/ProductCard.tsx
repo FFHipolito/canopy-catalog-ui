@@ -8,12 +8,13 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Tag, CheckCircle2, AlertCircle, Layers } from 'lucide-react';
+import { Tag, CheckCircle2, AlertCircle, Layers, Pencil } from 'lucide-react';
 import { Product, ProductCategory } from '@/types/product';
 
 interface ProductCardProps {
   product: Product;
   priority?: boolean;
+  onEdit?: (product: Product) => void;
 }
 
 const CATEGORY_STYLES: Record<ProductCategory, { bg: string; text: string; border: string }> = {
@@ -51,9 +52,14 @@ export const formatCurrencyBRL = (value: number): string => {
   }).format(value);
 };
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  priority = false,
+  onEdit,
+}) => {
   const [imageError, setImageError] = useState(false);
   const [isImageLoading, setIsImageLoading] = useState(true);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   const categoryStyle = CATEGORY_STYLES[product.category] || {
     bg: 'bg-zinc-100 dark:bg-zinc-800',
@@ -144,16 +150,30 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
             {product.name}
           </h3>
 
-          {/* Descrição com truncate elegante */}
-          <p className="mt-2 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">
-            {product.description}
-          </p>
+          {/* Descrição expansível com 'mais' / 'menos' */}
+          <div className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+            <p className={isDescriptionExpanded ? 'leading-relaxed' : 'line-clamp-2 leading-relaxed'}>
+              {product.description}
+            </p>
+            {product.description && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsDescriptionExpanded(!isDescriptionExpanded);
+                }}
+                className="mt-1 inline-flex items-center text-xs font-bold text-emerald-600 hover:text-emerald-700 hover:underline dark:text-emerald-400 dark:hover:text-emerald-300"
+              >
+                {isDescriptionExpanded ? 'menos' : 'mais'}
+              </button>
+            )}
+          </div>
         </div>
 
-        {/* Rodapé do Card com Preço Formatado */}
-        <div className="mt-5 flex items-baseline justify-between border-t border-zinc-100 pt-4 dark:border-zinc-800">
+        {/* Rodapé do Card com Preço Formatado e Botão de Atualizar Produto */}
+        <div className="mt-5 flex items-center justify-between border-t border-zinc-100 pt-4 dark:border-zinc-800">
           <div className="flex flex-col">
-            <span className="text-[11px] font-medium uppercase tracking-wider text-zinc-600 dark:text-zinc-300">
+            <span className="text-[11px] font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               Preço Estimado
             </span>
             <span className="text-xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
@@ -161,9 +181,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
             </span>
           </div>
 
-          <span className="text-xs font-semibold text-emerald-600 transition-colors group-hover:underline dark:text-emerald-400">
-            Ver detalhes &rarr;
-          </span>
+          <button
+            type="button"
+            onClick={() => onEdit?.(product)}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs font-semibold text-zinc-700 transition-all hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:border-emerald-500 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
+          >
+            <Pencil className="h-3 w-3" />
+            <span>Atualizar</span>
+          </button>
         </div>
       </div>
     </article>
