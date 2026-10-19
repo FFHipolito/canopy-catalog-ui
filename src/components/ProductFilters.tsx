@@ -41,8 +41,9 @@ export const ProductFilters: React.FC = () => {
   const setSort = useProductStore((state) => state.setSort);
   const resetFilters = useProductStore((state) => state.resetFilters);
 
-  const filteredProducts = useProductStore(selectFilteredProducts);
-  const priceBounds = useProductStore(selectPriceRangeBounds);
+  const filteredCount = useProductStore((state) => selectFilteredProducts(state).length);
+  const minPriceBound = useProductStore((state) => selectPriceRangeBounds(state).min);
+  const maxPriceBound = useProductStore((state) => selectPriceRangeBounds(state).max);
 
   // Estado local para digitação imediata no input de busca com debounce
   const [localSearch, setLocalSearch] = useState(filterCriteria.searchQuery);
@@ -72,29 +73,13 @@ export const ProductFilters: React.FC = () => {
     return () => clearTimeout(handler);
   }, [localSearch, filterCriteria.searchQuery, setSearchQuery]);
 
-  // Sincronização padrão React durante renderização (Storing information from previous renders)
-  const [prevSearchQuery, setPrevSearchQuery] = useState(filterCriteria.searchQuery);
-  if (filterCriteria.searchQuery !== prevSearchQuery) {
-    setPrevSearchQuery(filterCriteria.searchQuery);
-    setLocalSearch(filterCriteria.searchQuery);
-  }
-
-  const [prevMinPrice, setPrevMinPrice] = useState(filterCriteria.minPrice);
-  const [prevMaxPrice, setPrevMaxPrice] = useState(filterCriteria.maxPrice);
-  if (filterCriteria.minPrice !== prevMinPrice || filterCriteria.maxPrice !== prevMaxPrice) {
-    setPrevMinPrice(filterCriteria.minPrice);
-    setPrevMaxPrice(filterCriteria.maxPrice);
-    setMinPriceInput(
-      filterCriteria.minPrice !== null && filterCriteria.minPrice !== undefined
-        ? String(filterCriteria.minPrice)
-        : ''
-    );
-    setMaxPriceInput(
-      filterCriteria.maxPrice !== null && filterCriteria.maxPrice !== undefined
-        ? String(filterCriteria.maxPrice)
-        : ''
-    );
-  }
+  // Handler para resetar os filtros da store e os campos visuais locais
+  const handleResetFilters = () => {
+    resetFilters();
+    setLocalSearch('');
+    setMinPriceInput('');
+    setMaxPriceInput('');
+  };
 
   const handleApplyPrice = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -178,7 +163,7 @@ export const ProductFilters: React.FC = () => {
           {hasActiveFilters && (
             <button
               type="button"
-              onClick={resetFilters}
+              onClick={handleResetFilters}
               title="Restaurar filtros padrões"
               className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-xs font-semibold text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-white"
             >
@@ -227,7 +212,7 @@ export const ProductFilters: React.FC = () => {
             <input
               type="number"
               min="0"
-              placeholder={`Mín (${priceBounds.min})`}
+              placeholder={`Mín (${minPriceBound})`}
               value={minPriceInput}
               onChange={(e) => setMinPriceInput(e.target.value)}
               className="w-24 rounded-lg border border-zinc-200 bg-zinc-50 px-2.5 py-1.5 text-xs text-zinc-900 focus:border-emerald-500 focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
@@ -236,7 +221,7 @@ export const ProductFilters: React.FC = () => {
             <input
               type="number"
               min="0"
-              placeholder={`Máx (${priceBounds.max})`}
+              placeholder={`Máx (${maxPriceBound})`}
               value={maxPriceInput}
               onChange={(e) => setMaxPriceInput(e.target.value)}
               className="w-24 rounded-lg border border-zinc-200 bg-zinc-50 px-2.5 py-1.5 text-xs text-zinc-900 focus:border-emerald-500 focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
@@ -252,7 +237,7 @@ export const ProductFilters: React.FC = () => {
 
         {/* Resumo de Resultados */}
         <div className="text-xs text-zinc-600 dark:text-zinc-300">
-          Mostrando <strong className="text-zinc-900 dark:text-zinc-100">{filteredProducts.length}</strong> de{' '}
+          Mostrando <strong className="text-zinc-900 dark:text-zinc-100">{filteredCount}</strong> de{' '}
           <strong className="text-zinc-900 dark:text-zinc-100">{totalRawCount}</strong> produtos
         </div>
       </div>

@@ -15,6 +15,16 @@ import { X, Plus, Loader2, CheckCircle2, AlertTriangle, Image as ImageIcon } fro
 import { ProductCategory } from '@/types/product';
 import { useProductStore } from '@/store/useProductStore';
 
+// Compatibilidade de compatibilidade entre Zod v4 e @hookform/resolvers
+if (typeof Error !== 'undefined' && !('errors' in Error.prototype)) {
+  Object.defineProperty(Error.prototype, 'errors', {
+    get() {
+      return (this as unknown as { issues?: unknown[] }).issues;
+    },
+    configurable: true,
+  });
+}
+
 // Schema de validação Zod para novos produtos
 export const productSchema = z.object({
   name: z
