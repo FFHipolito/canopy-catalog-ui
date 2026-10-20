@@ -30,14 +30,18 @@ export default function CatalogPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState<Product | null>(null);
 
-  // Inicializa tema limpo e suave (padrão claro ou escolha do usuário em localStorage)
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('canopy_theme');
-      if (saved === 'dark') return 'dark';
+  // Inicializa tema de forma segura contra hydration mismatch no SSR
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const saved = localStorage.getItem('canopy_theme');
+    if (saved === 'dark') {
+      setTheme('dark');
+      document.documentElement.classList.add('dark');
     }
-    return 'light';
-  });
+  }, []);
 
   const fetchProducts = useProductStore((state) => state.fetchProducts);
   const isLoading = useProductStore((state) => state.isLoading);
@@ -51,12 +55,13 @@ export default function CatalogPage() {
 
   // Sincroniza a classe dark no elemento raiz HTML
   useEffect(() => {
+    if (!mounted) return;
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [theme]);
+  }, [theme, mounted]);
 
   const toggleTheme = () => {
     const nextTheme = theme === 'light' ? 'dark' : 'light';
@@ -122,17 +127,24 @@ export default function CatalogPage() {
             <button
               type="button"
               onClick={toggleTheme}
-              title={theme === 'dark' ? 'Mudar para Modo Claro' : 'Mudar para Modo Escuro'}
+              title={
+                !mounted
+                  ? 'Alternar tema'
+                  : theme === 'dark'
+                  ? 'Mudar para Modo Claro'
+                  : 'Mudar para Modo Escuro'
+              }
+              aria-label="Alternar tema claro ou escuro"
               className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-3 text-xs font-semibold text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
             >
-              {theme === 'dark' ? (
+              {mounted && theme === 'dark' ? (
                 <>
                   <Sun className="h-4 w-4 text-amber-400" />
                   <span className="hidden sm:inline">Modo Claro</span>
                 </>
               ) : (
                 <>
-                  <Moon className="h-4 w-4 text-zinc-600" />
+                  <Moon className="h-4 w-4 text-zinc-600 dark:text-zinc-300" />
                   <span className="hidden sm:inline">Modo Escuro</span>
                 </>
               )}
