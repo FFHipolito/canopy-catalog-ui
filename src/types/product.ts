@@ -20,6 +20,7 @@ export interface Product {
   imageUrl: string;
   sku?: string;
   inStock?: boolean;
+  stockQuantity?: number;
   unit?: string;
   createdAt?: string;
 }
@@ -36,6 +37,7 @@ export interface ProductFilterCriteria {
   minPrice?: number | null;
   maxPrice?: number | null;
   sort: SortOption;
+  onlyInStock?: boolean;
 }
 
 export interface PaginationState {

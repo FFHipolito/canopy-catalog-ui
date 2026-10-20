@@ -38,7 +38,11 @@ export class ProductService implements IProductService {
       ...input,
       id: ['suz', timestamp, randomSuffix].join('-'),
       createdAt: new Date().toISOString(),
-      inStock: input.inStock ?? true,
+      stockQuantity: input.stockQuantity !== undefined ? Number(input.stockQuantity) : 0,
+      inStock:
+        input.stockQuantity !== undefined
+          ? Number(input.stockQuantity) > 0
+          : input.inStock ?? true,
     };
 
     this.products = [newProduct, ...this.products];
@@ -61,6 +65,16 @@ export class ProductService implements IProductService {
       ...this.products[index],
       ...updates,
       price: updates.price !== undefined ? Number(updates.price) : this.products[index].price,
+      stockQuantity:
+        updates.stockQuantity !== undefined
+          ? Number(updates.stockQuantity)
+          : this.products[index].stockQuantity,
+      inStock:
+        updates.stockQuantity !== undefined
+          ? Number(updates.stockQuantity) > 0
+          : updates.inStock !== undefined
+          ? updates.inStock
+          : this.products[index].inStock,
     };
 
     this.products[index] = updatedProduct;
@@ -96,6 +110,15 @@ export class ProductService implements IProductService {
 
         if (maxPrice !== undefined && maxPrice !== null && !isNaN(maxPrice)) {
           if (product.price > maxPrice) {
+            return false;
+          }
+        }
+
+        if (criteria.onlyInStock) {
+          const isOutOfStock =
+            product.inStock === false ||
+            (product.stockQuantity !== undefined && product.stockQuantity <= 0);
+          if (isOutOfStock) {
             return false;
           }
         }

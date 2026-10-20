@@ -167,4 +167,21 @@ describe('ProductFilters Component', () => {
 
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
+
+  it('deve alternar o filtro de produtos com estoque disponível', async () => {
+    const user = userEvent.setup();
+    render(<ProductFilters defaultExpanded={true} />);
+
+    const stockSwitch = screen.getByRole('switch', {
+      name: /Apenas produtos com estoque disponível/i,
+    });
+    expect(stockSwitch).toBeInTheDocument();
+    expect(useProductStore.getState().filterCriteria.onlyInStock).toBeFalsy();
+
+    await user.click(stockSwitch);
+    expect(useProductStore.getState().filterCriteria.onlyInStock).toBe(true);
+
+    await user.click(stockSwitch);
+    expect(useProductStore.getState().filterCriteria.onlyInStock).toBe(false);
+  });
 });

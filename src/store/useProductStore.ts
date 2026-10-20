@@ -47,6 +47,7 @@ export interface ProductStoreState {
   setCategory: (category: ProductCategory | 'ALL') => void;
   setPriceRange: (min?: number | null, max?: number | null) => void;
   setSort: (sort: SortOption) => void;
+  setOnlyInStock: (onlyInStock: boolean) => void;
   resetFilters: () => void;
 
   // Ações de Paginação
@@ -60,6 +61,7 @@ const INITIAL_FILTERS: ProductFilterCriteria = {
   minPrice: null,
   maxPrice: null,
   sort: 'name-asc',
+  onlyInStock: false,
 };
 
 const DEFAULT_PAGE_SIZE = 6;
@@ -163,6 +165,13 @@ export const createProductStore = (service: IProductService = productService) =>
     setSort: (sort: SortOption) => {
       set((state) => ({
         filterCriteria: { ...state.filterCriteria, sort },
+        currentPage: 1,
+      }));
+    },
+
+    setOnlyInStock: (onlyInStock: boolean) => {
+      set((state) => ({
+        filterCriteria: { ...state.filterCriteria, onlyInStock },
         currentPage: 1,
       }));
     },

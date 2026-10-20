@@ -4,7 +4,7 @@
  * @file Pagination.tsx
  * @description Componente de paginação numerada, acessível e configurável.
  * Fornece botões anterior/próximo, números de página com elipses inteligentes,
- * seletor de itens por página e feedback nítido de página ativa para leitores de tela.
+ * seletor de itens por página, conformidade WCAG AA e anéis de foco acessíveis.
  */
 
 import React from 'react';
@@ -42,7 +42,6 @@ export const Pagination: React.FC = () => {
 
   /**
    * Gera a lista de números e elipses a serem exibidos.
-   * Exemplo: [1, 2, 3, '...', 10]
    */
   const getPageNumbers = (): (number | string)[] => {
     if (totalPages <= 7) {
@@ -79,25 +78,25 @@ export const Pagination: React.FC = () => {
     <nav
       role="navigation"
       aria-label="Paginação de produtos"
-      className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-zinc-200 pt-6 sm:flex-row dark:border-zinc-800"
+      className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-6 sm:flex-row dark:border-slate-800"
     >
       {/* Indicador de Itens e Seletor de PageSize */}
-      <div className="flex items-center gap-3 text-xs text-zinc-600 dark:text-zinc-300">
+      <div className="flex items-center gap-3 text-xs text-slate-600 dark:text-slate-300">
         <span>
-          Mostrando <strong className="font-semibold text-zinc-900 dark:text-zinc-100">{startItemIndex}</strong> a{' '}
-          <strong className="font-semibold text-zinc-900 dark:text-zinc-100">{endItemIndex}</strong> de{' '}
-          <strong className="font-semibold text-zinc-900 dark:text-zinc-100">{totalItems}</strong> produtos
+          Mostrando <strong className="font-semibold text-slate-900 dark:text-slate-100">{startItemIndex}</strong> a{' '}
+          <strong className="font-semibold text-slate-900 dark:text-slate-100">{endItemIndex}</strong> de{' '}
+          <strong className="font-semibold text-slate-900 dark:text-slate-100">{totalItems}</strong> produtos
         </span>
 
-        <div className="flex items-center gap-1.5 border-l border-zinc-200 pl-3 dark:border-zinc-700">
-          <label htmlFor="page-size-select" className="text-zinc-600 dark:text-zinc-300">
+        <div className="flex items-center gap-1.5 border-l border-slate-200 pl-3 dark:border-slate-700">
+          <label htmlFor="page-size-select" className="text-slate-600 dark:text-slate-300">
             Exibir:
           </label>
           <select
             id="page-size-select"
             value={pageSize}
             onChange={(e) => setPageSize(Number(e.target.value))}
-            className="rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
+            className="rounded-md border border-slate-300 bg-white px-2 py-1 text-xs font-semibold text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
           >
             <option value={6}>6</option>
             <option value={12}>12</option>
@@ -114,7 +113,7 @@ export const Pagination: React.FC = () => {
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={!hasPrevPage}
           aria-label="Ir para a página anterior"
-          className="inline-flex h-9 items-center gap-1 rounded-lg border border-zinc-200 bg-white px-2.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+          className="inline-flex h-9 items-center gap-1 rounded-lg border border-slate-300 bg-white px-2.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:focus-visible:ring-offset-slate-900"
         >
           <ChevronLeft className="h-4 w-4" />
           <span className="hidden sm:inline">Anterior</span>
@@ -127,7 +126,7 @@ export const Pagination: React.FC = () => {
               return (
                 <span
                   key={`ellipsis-${idx}`}
-                  className="px-2 py-1 text-xs font-semibold text-zinc-400"
+                  className="px-2 py-1 text-xs font-semibold text-slate-500"
                 >
                   ...
                 </span>
@@ -142,10 +141,10 @@ export const Pagination: React.FC = () => {
                 onClick={() => setCurrentPage(page)}
                 aria-label={`Ir para a página ${page}`}
                 aria-current={isCurrent ? 'page' : undefined}
-                className={`h-9 min-w-9 rounded-lg px-2.5 text-xs font-bold transition-all ${
+                className={`h-9 min-w-9 rounded-lg px-2.5 text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 ${
                   isCurrent
                     ? 'bg-emerald-600 text-white shadow-xs dark:bg-emerald-500'
-                    : 'border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700'
+                    : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
                 }`}
               >
                 {page}
@@ -160,7 +159,7 @@ export const Pagination: React.FC = () => {
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={!hasNextPage}
           aria-label="Ir para a próxima página"
-          className="inline-flex h-9 items-center gap-1 rounded-lg border border-zinc-200 bg-white px-2.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+          className="inline-flex h-9 items-center gap-1 rounded-lg border border-slate-300 bg-white px-2.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:focus-visible:ring-offset-slate-900"
         >
           <span className="hidden sm:inline">Próximo</span>
           <ChevronRight className="h-4 w-4" />

@@ -100,10 +100,37 @@ describe('ProductFormModal Component', () => {
       ).toBeInTheDocument();
     });
 
-    // Deve ter adicionado na store
+    // Deve ter adicionado na store com a quantidade de estoque definida
     const products = useProductStore.getState().products;
-    expect(
-      products.some((p) => p.name === 'Papel Tissue Premium Ecofibra')
-    ).toBe(true);
+    const addedProduct = products.find((p) => p.name === 'Papel Tissue Premium Ecofibra');
+    expect(addedProduct).toBeDefined();
+    expect(addedProduct?.stockQuantity).toBe(15);
+  });
+
+  it('deve permitir definir quantidade em estoque personalizada no cadastro', async () => {
+    const user = userEvent.setup();
+    render(<ProductFormModal isOpen={true} onClose={onCloseMock} />);
+
+    await user.type(screen.getByLabelText(/Nome do Produto/i), 'Válvula Esfera Industrial');
+    await user.type(screen.getByLabelText(/Preço Unitário/i), '850');
+    await user.type(screen.getByLabelText(/URL da Imagem/i), 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d');
+    await user.type(screen.getByLabelText(/Descrição Detalhada/i), 'Válvula esfera com corpo em aço inoxidável 316.');
+
+    const stockInput = screen.getByLabelText(/Estoque Operacional/i);
+    await user.clear(stockInput);
+    await user.type(stockInput, '45');
+
+    const submitButton = screen.getByRole('button', { name: /Salvar Produto/i });
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/cadastrado com sucesso!/i)).toBeInTheDocument();
+    });
+
+    const products = useProductStore.getState().products;
+    const addedProduct = products.find((p) => p.name === 'Válvula Esfera Industrial');
+    expect(addedProduct).toBeDefined();
+    expect(addedProduct?.stockQuantity).toBe(45);
+    expect(addedProduct?.inStock).toBe(true);
   });
 });
