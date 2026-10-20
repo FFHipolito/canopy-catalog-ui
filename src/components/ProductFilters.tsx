@@ -7,7 +7,7 @@
  * filtro numérico de faixa de preço e menu suspenso de ordenação dinâmico.
  */
 
-import React, { useState, useEffect, useTransition } from 'react';
+import React, { useState, useEffect, useTransition, useRef } from 'react';
 import {
   Search,
   X,
@@ -16,6 +16,11 @@ import {
   ArrowUpDown,
   DollarSign,
   ChevronDown,
+  ArrowDownAZ,
+  ArrowDownZA,
+  ArrowDown01,
+  ArrowDown10,
+  Check,
 } from 'lucide-react';
 import { ProductCategory, SortOption } from '@/types/product';
 import {
@@ -33,11 +38,38 @@ const ALL_CATEGORIES: (ProductCategory | 'ALL')[] = [
   'Bioprodutos e Inovação',
 ];
 
-const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: 'name-asc', label: 'Nome (A a Z)' },
-  { value: 'name-desc', label: 'Nome (Z a A)' },
-  { value: 'price-asc', label: 'Menor Preço' },
-  { value: 'price-desc', label: 'Maior Preço' },
+interface SortOptionItem {
+  value: SortOption;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  description: string;
+}
+
+const SORT_OPTIONS: SortOptionItem[] = [
+  {
+    value: 'name-asc',
+    label: 'Nome (A a Z)',
+    icon: ArrowDownAZ,
+    description: 'Ordem alfabética crescente',
+  },
+  {
+    value: 'name-desc',
+    label: 'Nome (Z a A)',
+    icon: ArrowDownZA,
+    description: 'Ordem alfabética decrescente',
+  },
+  {
+    value: 'price-asc',
+    label: 'Menor Preço',
+    icon: ArrowDown01,
+    description: 'Do mais econômico ao maior',
+  },
+  {
+    value: 'price-desc',
+    label: 'Maior Preço',
+    icon: ArrowDown10,
+    description: 'Do maior valor ao mais econômico',
+  },
 ];
 
 export interface ProductFiltersProps {
@@ -59,6 +91,35 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
 
   // Filtros recolhidos por padrão para layout limpo
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+
+  // Estado e referência para o menu suspenso customizado de ordenação
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const sortRef = useRef<HTMLDivElement>(null);
+
+  // Fecha o dropdown de ordenação ao clicar fora ou ao pressionar Escape
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
+        setIsSortOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsSortOpen(false);
+      }
+    };
+
+    if (isSortOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isSortOpen]);
 
   // Estado local para digitação imediata no input de busca com debounce
   const [localSearch, setLocalSearch] = useState(filterCriteria.searchQuery);
@@ -117,6 +178,10 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
     filterCriteria.searchQuery !== '' ||
     hasAdvancedFilters ||
     filterCriteria.sort !== 'name-asc';
+
+  const currentSortOption =
+    SORT_OPTIONS.find((opt) => opt.value === filterCriteria.sort) || SORT_OPTIONS[0];
+  const CurrentSortIcon = currentSortOption.icon;
 
   return (
     <section
@@ -180,30 +245,89 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
             />
           </button>
 
-          {/* Menu Suspenso de Ordenação Dinâmica com Fundo e Contraste Sólidos */}
-          <div className="relative flex items-center">
-            <label htmlFor="sort-select" className="sr-only">
-              Ordenar produtos
-            </label>
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
-              <ArrowUpDown className="h-3.5 w-3.5" />
-            </div>
-            <select
-              id="sort-select"
-              value={filterCriteria.sort}
-              onChange={(e) => setSort(e.target.value as SortOption)}
-              className="appearance-none rounded-xl border border-zinc-300 bg-white py-2.5 pr-8 pl-9 text-xs font-semibold text-zinc-800 transition-colors focus:border-emerald-600 focus:bg-white focus:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-emerald-400 dark:focus:bg-zinc-800 dark:focus:text-white"
+          {/* Menu Suspenso de Ordenação Customizado e Elegante */}
+          <div ref={sortRef} className="relative">
+            <button
+              id="sort-menu-button"
+              type="button"
+              aria-haspopup="listbox"
+              aria-expanded={isSortOpen}
+              aria-label={`Ordenar produtos: ${currentSortOption.label}`}
+              onClick={() => setIsSortOpen((prev) => !prev)}
+              className={`inline-flex items-center gap-2 rounded-xl border px-3.5 py-2.5 text-xs font-semibold transition-all ${
+                isSortOpen || filterCriteria.sort !== 'name-asc'
+                  ? 'border-emerald-500 bg-emerald-50 text-emerald-800 shadow-xs dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300'
+                  : 'border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-750'
+              }`}
             >
-              {SORT_OPTIONS.map((opt) => (
-                <option
-                  key={opt.value}
-                  value={opt.value}
-                  className="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
-                >
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+              <CurrentSortIcon className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <span>{currentSortOption.label}</span>
+              <ChevronDown
+                className={`h-3.5 w-3.5 text-zinc-400 transition-transform duration-200 ${
+                  isSortOpen ? 'rotate-180 text-emerald-600 dark:text-emerald-400' : ''
+                }`}
+              />
+            </button>
+
+            {/* Painel Flutuante de Opções */}
+            {isSortOpen && (
+              <div
+                role="listbox"
+                aria-labelledby="sort-menu-button"
+                className="absolute right-0 top-full mt-2 w-64 origin-top-right rounded-2xl border border-zinc-200 bg-white p-1.5 shadow-xl shadow-zinc-950/10 z-50 animate-in fade-in zoom-in-95 duration-150 dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-black/60"
+              >
+                <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-1.5 border-b border-zinc-100 dark:border-zinc-800/80 mb-1">
+                  <ArrowUpDown className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                  <span>Ordenar Catálogo</span>
+                </div>
+                <div className="space-y-1">
+                  {SORT_OPTIONS.map((opt) => {
+                    const isSelected = filterCriteria.sort === opt.value;
+                    const OptionIcon = opt.icon;
+
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        role="option"
+                        aria-selected={isSelected}
+                        onClick={() => {
+                          setSort(opt.value);
+                          setIsSortOpen(false);
+                        }}
+                        className={`group flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left text-xs transition-colors ${
+                          isSelected
+                            ? 'bg-emerald-50 text-emerald-900 font-semibold dark:bg-emerald-950/50 dark:text-emerald-200'
+                            : 'text-zinc-700 hover:bg-zinc-100/80 hover:text-zinc-900 font-medium dark:text-zinc-300 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <span
+                            className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-colors ${
+                              isSelected
+                                ? 'bg-emerald-600 text-white shadow-xs dark:bg-emerald-500'
+                                : 'bg-zinc-100 text-zinc-500 group-hover:bg-zinc-200/80 group-hover:text-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:group-hover:bg-zinc-700 dark:group-hover:text-zinc-200'
+                            }`}
+                          >
+                            <OptionIcon className="h-3.5 w-3.5" />
+                          </span>
+                          <div className="truncate">
+                            <div className="truncate font-medium">{opt.label}</div>
+                            <div className="text-[10px] text-zinc-400 dark:text-zinc-500 font-normal truncate">
+                              {opt.description}
+                            </div>
+                          </div>
+                        </div>
+
+                        {isSelected && (
+                          <Check className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400 animate-in fade-in duration-150" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Botão de Limpar Filtros */}

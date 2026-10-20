@@ -228,7 +228,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
                 {isEditing
                   ? 'Edite as especificações e valores do produto selecionado'
-                  : 'Adicione um item ao catálogo industrial com validação reativa'}
+                  : 'Adicione um item ao catálogo de produtos'}
               </p>
             </div>
           </div>
@@ -247,11 +247,10 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
         {toastMessage && (
           <div
             role="alert"
-            className={`mx-6 mt-4 flex items-center gap-2.5 rounded-xl p-3 text-xs font-semibold ${
-              toastMessage.type === 'success'
+            className={`mx-6 mt-4 flex items-center gap-2.5 rounded-xl p-3 text-xs font-semibold ${toastMessage.type === 'success'
                 ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800'
                 : 'bg-red-50 text-red-800 border border-red-200 dark:bg-red-950/50 dark:text-red-300 dark:border-red-800'
-            }`}
+              }`}
           >
             {toastMessage.type === 'success' ? (
               <CheckCircle2 className="h-4 w-4 shrink-0" />
@@ -274,11 +273,10 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
               type="text"
               placeholder="Ex: Celulose Kraft Eucalipto Bleached"
               {...register('name')}
-              className={`mt-1.5 w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 transition-colors focus:bg-white focus:text-zinc-900 focus:outline-none dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:bg-zinc-800 dark:focus:text-white ${
-                errors.name
+              className={`mt-1.5 w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 transition-colors focus:bg-white focus:text-zinc-900 focus:outline-none dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:bg-zinc-800 dark:focus:text-white ${errors.name
                   ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:border-red-700'
                   : 'border-zinc-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:focus:border-emerald-400'
-              }`}
+                }`}
             />
             {errors.name && (
               <p className="mt-1 text-xs font-medium text-red-600 dark:text-red-400">
@@ -324,11 +322,10 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 min="0"
                 placeholder="Ex: 3450.00"
                 {...register('price', { valueAsNumber: true })}
-                className={`mt-1.5 w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 transition-colors focus:bg-white focus:text-zinc-900 focus:outline-none dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:bg-zinc-800 dark:focus:text-white ${
-                  errors.price
+                className={`mt-1.5 w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 transition-colors focus:bg-white focus:text-zinc-900 focus:outline-none dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:bg-zinc-800 dark:focus:text-white ${errors.price
                     ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:border-red-700'
                     : 'border-zinc-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:focus:border-emerald-400'
-                }`}
+                  }`}
               />
               {errors.price && (
                 <p className="mt-1 text-xs font-medium text-red-600 dark:text-red-400">
@@ -381,11 +378,10 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 type="url"
                 placeholder="https://images.unsplash.com/photo-..."
                 {...register('imageUrl')}
-                className={`w-full rounded-xl border bg-white py-2.5 pr-3.5 pl-10 text-sm text-zinc-900 placeholder:text-zinc-400 transition-colors focus:bg-white focus:text-zinc-900 focus:outline-none dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:bg-zinc-800 dark:focus:text-white ${
-                  errors.imageUrl
+                className={`w-full rounded-xl border bg-white py-2.5 pr-3.5 pl-10 text-sm text-zinc-900 placeholder:text-zinc-400 transition-colors focus:bg-white focus:text-zinc-900 focus:outline-none dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:bg-zinc-800 dark:focus:text-white ${errors.imageUrl
                     ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:border-red-700'
                     : 'border-zinc-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:focus:border-emerald-400'
-                }`}
+                  }`}
               />
             </div>
             {errors.imageUrl && (
@@ -405,11 +401,10 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
               rows={3}
               placeholder="Descreva as características técnicas, aplicações e sustentabilidade do produto..."
               {...register('description')}
-              className={`mt-1.5 w-full rounded-xl border bg-white p-3 text-sm text-zinc-900 placeholder:text-zinc-400 transition-colors focus:bg-white focus:text-zinc-900 focus:outline-none dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:bg-zinc-800 dark:focus:text-white ${
-                errors.description
+              className={`mt-1.5 w-full rounded-xl border bg-white p-3 text-sm text-zinc-900 placeholder:text-zinc-400 transition-colors focus:bg-white focus:text-zinc-900 focus:outline-none dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:bg-zinc-800 dark:focus:text-white ${errors.description
                   ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:border-red-700'
                   : 'border-zinc-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:focus:border-emerald-400'
-              }`}
+                }`}
             />
             {errors.description && (
               <p className="mt-1 text-xs font-medium text-red-600 dark:text-red-400">

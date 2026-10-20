@@ -129,4 +129,42 @@ describe('ProductFilters Component', () => {
     const filtered = selectFilteredProducts(useProductStore.getState());
     expect(filtered.length).toBe(mockCatalog.length);
   });
+
+  it('deve abrir o menu de ordenação e atualizar o critério ao selecionar uma opção', async () => {
+    const user = userEvent.setup();
+    render(<ProductFilters />);
+
+    // Inicialmente o menu suspenso não está visível
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+
+    // Clica no botão de ordenação atual
+    const sortButton = screen.getByRole('button', { name: /Ordenar produtos: Nome \(A a Z\)/i });
+    await user.click(sortButton);
+
+    // O menu suspenso deve estar aberto com a lista de opções
+    const listbox = screen.getByRole('listbox');
+    expect(listbox).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: /Maior Preço/i })).toBeInTheDocument();
+
+    // Clica na opção "Maior Preço"
+    await user.click(screen.getByRole('option', { name: /Maior Preço/i }));
+
+    // O menu deve fechar e a store deve ser atualizada
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(useProductStore.getState().filterCriteria.sort).toBe('price-desc');
+  });
+
+  it('deve fechar o menu de ordenação ao pressionar a tecla Escape', async () => {
+    const user = userEvent.setup();
+    render(<ProductFilters />);
+
+    const sortButton = screen.getByRole('button', { name: /Ordenar produtos: Nome \(A a Z\)/i });
+    await user.click(sortButton);
+
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+    await user.keyboard('{Escape}');
+
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
 });
