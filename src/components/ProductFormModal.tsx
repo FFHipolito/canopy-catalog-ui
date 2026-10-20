@@ -205,7 +205,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto"
     >
       {/* Backdrop */}
       <div
@@ -213,10 +213,10 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
         className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in"
       />
 
-      {/* Caixa de Diálogo */}
-      <div className="relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl transition-all dark:border-zinc-800 dark:bg-zinc-900 animate-in zoom-in-95 duration-200">
-        {/* Cabeçalho do Modal */}
-        <div className="flex items-center justify-between border-b border-zinc-100 px-6 py-4 dark:border-zinc-800">
+      {/* Caixa de Diálogo Responsiva com Altura Controlada */}
+      <div className="relative z-10 my-auto flex max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2.5rem)] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl transition-all dark:border-zinc-800 dark:bg-zinc-900 animate-in zoom-in-95 duration-200">
+        {/* Cabeçalho do Modal (Fixo no topo) */}
+        <div className="flex shrink-0 items-center justify-between border-b border-zinc-100 px-5 py-3.5 sm:px-6 sm:py-4 dark:border-zinc-800">
           <div className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400">
               <Plus className={`h-5 w-5 ${isEditing ? 'rotate-45' : ''}`} />
@@ -245,24 +245,27 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
         {/* Notificação Toast Flutuante Interna */}
         {toastMessage && (
-          <div
-            role="alert"
-            className={`mx-6 mt-4 flex items-center gap-2.5 rounded-xl p-3 text-xs font-semibold ${toastMessage.type === 'success'
-                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800'
-                : 'bg-red-50 text-red-800 border border-red-200 dark:bg-red-950/50 dark:text-red-300 dark:border-red-800'
-              }`}
-          >
-            {toastMessage.type === 'success' ? (
-              <CheckCircle2 className="h-4 w-4 shrink-0" />
-            ) : (
-              <AlertTriangle className="h-4 w-4 shrink-0" />
-            )}
-            <span>{toastMessage.text}</span>
+          <div className="px-5 pt-3 sm:px-6 shrink-0">
+            <div
+              role="alert"
+              className={`flex items-center gap-2.5 rounded-xl p-3 text-xs font-semibold ${toastMessage.type === 'success'
+                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800'
+                  : 'bg-red-50 text-red-800 border border-red-200 dark:bg-red-950/50 dark:text-red-300 dark:border-red-800'
+                }`}
+            >
+              {toastMessage.type === 'success' ? (
+                <CheckCircle2 className="h-4 w-4 shrink-0" />
+              ) : (
+                <AlertTriangle className="h-4 w-4 shrink-0" />
+              )}
+              <span>{toastMessage.text}</span>
+            </div>
           </div>
         )}
 
-        {/* Formulário com React Hook Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-6" noValidate>
+        {/* Formulário com Área de Conteúdo Rolável e Rodapé Pinned */}
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-1 flex-col overflow-hidden" noValidate>
+          <div className="flex-1 overflow-y-auto space-y-4 p-5 sm:p-6">
           {/* Campo Nome */}
           <div>
             <label htmlFor="product-name" className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
@@ -413,8 +416,10 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
             )}
           </div>
 
-          {/* Ações do Rodapé */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+          </div>
+
+          {/* Ações do Rodapé (Fixado na base) */}
+          <div className="flex shrink-0 items-center justify-end gap-3 border-t border-zinc-100 bg-zinc-50/80 px-5 py-3.5 sm:px-6 sm:py-4 backdrop-blur-xs dark:border-zinc-800 dark:bg-zinc-900/90">
             <button
               type="button"
               onClick={onClose}
