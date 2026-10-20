@@ -227,8 +227,8 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
             onClick={() => setIsExpanded(!isExpanded)}
             className={`inline-flex items-center gap-2 rounded-xl border px-3.5 py-2.5 text-xs font-semibold transition-all ${
               isExpanded || hasAdvancedFilters
-                ? 'border-emerald-500 bg-emerald-50 text-emerald-800 shadow-xs dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300'
-                : 'border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-750'
+                ? 'border-emerald-500 bg-emerald-50 text-emerald-800 shadow-xs dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:bg-emerald-950/70'
+                : 'border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700/60 dark:hover:border-zinc-600 dark:hover:text-white'
             }`}
           >
             <SlidersHorizontal className="h-3.5 w-3.5" />
@@ -256,8 +256,8 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
               onClick={() => setIsSortOpen((prev) => !prev)}
               className={`inline-flex items-center gap-2 rounded-xl border px-3.5 py-2.5 text-xs font-semibold transition-all ${
                 isSortOpen || filterCriteria.sort !== 'name-asc'
-                  ? 'border-emerald-500 bg-emerald-50 text-emerald-800 shadow-xs dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300'
-                  : 'border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-750'
+                  ? 'border-emerald-500 bg-emerald-50 text-emerald-800 shadow-xs dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:bg-emerald-950/70'
+                  : 'border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700/60 dark:hover:border-zinc-600 dark:hover:text-white'
               }`}
             >
               <CurrentSortIcon className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
@@ -336,7 +336,7 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
               type="button"
               onClick={handleResetFilters}
               title="Restaurar filtros padrões"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-xs font-semibold text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-white"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-xs font-semibold text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700/60 dark:hover:border-zinc-600 dark:hover:text-white"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Limpar</span>
@@ -391,7 +391,7 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
                   placeholder={`Mín (R$ ${minPriceBound})`}
                   value={minPriceInput}
                   onChange={(e) => setMinPriceInput(e.target.value)}
-                  className="w-28 rounded-xl border border-zinc-300 bg-white px-3 py-1.5 text-xs text-zinc-900 placeholder:text-zinc-400 [appearance:textfield] focus:border-emerald-600 focus:bg-white focus:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-emerald-400 dark:focus:bg-zinc-800"
+                  className="w-28 rounded-xl border border-zinc-300 bg-white px-3 py-1.5 text-xs text-zinc-900 placeholder:text-zinc-400 [appearance:textfield] focus:border-emerald-600 focus:bg-white focus:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-500 dark:focus:border-emerald-400 dark:focus:bg-zinc-800 dark:focus:text-white"
                 />
                 <span className="text-xs font-medium text-zinc-400">até</span>
                 <input
@@ -401,7 +401,7 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
                   placeholder={`Máx (R$ ${maxPriceBound})`}
                   value={maxPriceInput}
                   onChange={(e) => setMaxPriceInput(e.target.value)}
-                  className="w-28 rounded-xl border border-zinc-300 bg-white px-3 py-1.5 text-xs text-zinc-900 placeholder:text-zinc-400 [appearance:textfield] focus:border-emerald-600 focus:bg-white focus:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-emerald-400 dark:focus:bg-zinc-800"
+                  className="w-28 rounded-xl border border-zinc-300 bg-white px-3 py-1.5 text-xs text-zinc-900 placeholder:text-zinc-400 [appearance:textfield] focus:border-emerald-600 focus:bg-white focus:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-500 dark:focus:border-emerald-400 dark:focus:bg-zinc-800 dark:focus:text-white"
                 />
                 <button
                   type="submit"

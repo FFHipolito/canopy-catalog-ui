@@ -135,7 +135,7 @@ export default function CatalogPage() {
                   : 'Mudar para Modo Escuro'
               }
               aria-label="Alternar tema claro ou escuro"
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-3 text-xs font-semibold text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-3 text-xs font-semibold text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700/60 dark:hover:border-zinc-600 dark:hover:text-white"
             >
               {mounted && theme === 'dark' ? (
                 <>
