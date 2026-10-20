@@ -52,20 +52,20 @@ Projetada sob os alicerces da **Clean Architecture**, **Domain-Driven Design (DD
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                            CAMADA DE APRESENTAÇÃO (UI)                      │
 │                                                                             │
-│  ┌───────────────────────┐  ┌───────────────────────┐  ┌─────────────────┐ │
-│  │   ProductFilters      │  │      ProductCard      │  │ ProductFormModal│ │
-│  │  (Debounce Search,    │  │  (BRL Format, Badges, │  │   (Zod + RHF,   │ │
-│  │   Category, Range)    │  │    Image Fallback)    │  │ Toast Feedback) │ │
-│  └───────────┬───────────┘  └───────────▲───────────┘  └────────┬────────┘ │
+│  ┌───────────────────────┐  ┌───────────────────────┐  ┌─────────────────┐  │
+│  │   ProductFilters      │  │      ProductCard      │  │ ProductFormModal│  │
+│  │  (Debounce Search,    │  │  (BRL Format, Badges, │  │   (Zod + RHF,   │  │
+│  │   Category, Range)    │  │    Image Fallback)    │  │ Toast Feedback) │  │
+│  └───────────┬───────────┘  └───────────▲───────────┘  └────────┬────────┘  │
 └──────────────┼──────────────────────────┼───────────────────────┼───────────┘
                │ Dispara Filtros          │ Consome Dados         │ Dispara
                ▼                          │ Derivados             ▼ addProduct()
 ┌─────────────────────────────────────────┴───────────────────────────────────┐
-│                    CAMADA DE ESTADO GLOBAL (Zustand Store)                   │
+│                    CAMADA DE ESTADO GLOBAL (Zustand Store)                  │
 │                                                                             │
 │   • Estado Canônico: products, filterCriteria, pagination, isLoading        │
 │   • Seletores Puros:                                                        │
-│       - selectFilteredProducts(state)  ──► Executa regras de filtro/sort   │
+│       - selectFilteredProducts(state)  ──► Executa regras de filtro/sort    │
 │       - selectPaginatedProducts(state) ──► Fatiamento matemático por página │
 │       - selectPaginationInfo(state)    ──► Contadores e limites de página   │
 └──────────────────────────────────────┬──────────────────────────────────────┘
