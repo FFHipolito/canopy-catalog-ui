@@ -190,7 +190,7 @@ canopy-catalog-ui/
 ### 3.2. Instalação
 Clone o repositório e instale todas as dependências:
 ```bash
-git clone https://github.com/fernandofh/canopy-catalog-ui.git
+git clone https://github.com/FFHipolito/canopy-catalog-ui.git
 cd canopy-catalog-ui
 npm install
 ```
