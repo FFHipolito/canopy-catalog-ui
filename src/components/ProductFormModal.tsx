@@ -234,16 +234,16 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
         className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in"
       />
 
-      {/* Caixa de Diálogo Responsiva com Altura Controlada */}
-      <div className="relative z-10 my-auto flex max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2.5rem)] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl transition-all dark:border-slate-800 dark:bg-slate-900 animate-in zoom-in-95 duration-200">
+      {/* Caixa de Diálogo Responsiva com Altura Controlada e sem scroll desnecessário */}
+      <div className="relative z-10 my-auto flex max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2.5rem)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl transition-all dark:border-slate-800 dark:bg-slate-900 animate-in zoom-in-95 duration-200">
         {/* Cabeçalho do Modal (Fixo no topo) */}
-        <div className="flex shrink-0 items-center justify-between border-b border-slate-100 px-5 py-3.5 sm:px-6 sm:py-4 dark:border-slate-800">
+        <div className="flex shrink-0 items-center justify-between border-b border-slate-100 px-5 py-3 sm:px-6 dark:border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
-              <Plus className={`h-5 w-5 ${isEditing ? 'rotate-45' : ''}`} />
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+              <Plus className={`h-4 w-4 ${isEditing ? 'rotate-45' : ''}`} />
             </div>
             <div>
-              <h2 id="modal-title" className="text-base font-bold text-slate-900 dark:text-slate-50">
+              <h2 id="modal-title" className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-50">
                 {isEditing ? 'Atualizar Produto' : 'Cadastrar Novo Produto'}
               </h2>
               <p className="text-xs text-slate-600 dark:text-slate-300">
@@ -258,7 +258,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Fechar modal"
-            className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+            className="rounded-lg p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
           >
             <X className="h-5 w-5" />
           </button>
@@ -266,10 +266,10 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
         {/* Notificação Toast Flutuante Interna */}
         {toastMessage && (
-          <div className="px-5 pt-3 sm:px-6 shrink-0">
+          <div className="px-5 pt-2.5 sm:px-6 shrink-0">
             <div
               role="alert"
-              className={`flex items-center gap-2.5 rounded-xl p-3 text-xs font-semibold ${
+              className={`flex items-center gap-2.5 rounded-xl p-2.5 text-xs font-semibold ${
                 toastMessage.type === 'success'
                   ? 'bg-emerald-50 text-emerald-900 border border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800'
                   : 'bg-rose-50 text-rose-900 border border-rose-200 dark:bg-rose-950/50 dark:text-rose-300 dark:border-rose-800'
@@ -285,9 +285,9 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
           </div>
         )}
 
-        {/* Formulário com Área de Conteúdo Rolável e Rodapé Pinned */}
+        {/* Formulário Compacto sem Barra Vertical */}
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-1 flex-col overflow-hidden" noValidate>
-          <div className="flex-1 overflow-y-auto space-y-4 p-5 sm:p-6">
+          <div className="flex-1 overflow-y-auto space-y-3 p-4 sm:p-5">
             {/* Campo Nome */}
             <div>
               <label htmlFor="product-name" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -298,21 +298,21 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 type="text"
                 placeholder="Ex: Válvula Reguladora de Pressão DN50"
                 {...register('name')}
-                className={`mt-1.5 w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 ${
+                className={`mt-1 w-full rounded-xl border bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 ${
                   errors.name
                     ? 'border-red-400 dark:border-red-700'
                     : 'border-slate-300 dark:border-slate-700'
                 }`}
               />
               {errors.name && (
-                <p className="mt-1 text-xs font-medium text-red-600 dark:text-red-400">
+                <p className="mt-0.5 text-xs font-medium text-red-600 dark:text-red-400">
                   {errors.name.message}
                 </p>
               )}
             </div>
 
             {/* Grid Categoria + SKU */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {/* Categoria */}
               <div>
                 <label htmlFor="product-category" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -321,7 +321,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 <select
                   id="product-category"
                   {...register('category')}
-                  className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                  className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
                 >
                   <option value="Celulose">Celulose</option>
                   <option value="Papéis de Imprimir e Escrever">Papéis de Imprimir e Escrever</option>
@@ -330,7 +330,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                   <option value="Bioprodutos e Inovação">Bioprodutos e Inovação</option>
                 </select>
                 {errors.category && (
-                  <p className="mt-1 text-xs font-medium text-red-600 dark:text-red-400">
+                  <p className="mt-0.5 text-xs font-medium text-red-600 dark:text-red-400">
                     {errors.category.message}
                   </p>
                 )}
@@ -346,13 +346,13 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                   type="text"
                   placeholder="Ex: VLV-REG-DN50"
                   {...register('sku')}
-                  className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm uppercase text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400"
+                  className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm uppercase text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400"
                 />
               </div>
             </div>
 
             {/* Grid Preço Unitário + Estoque Operacional */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {/* Preço Unitário */}
               <div>
                 <label htmlFor="product-price" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -365,14 +365,14 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                   min="0"
                   placeholder="Ex: 3450.00"
                   {...register('price', { valueAsNumber: true })}
-                  className={`mt-1.5 w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 ${
+                  className={`mt-1 w-full rounded-xl border bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 ${
                     errors.price
                       ? 'border-red-400 dark:border-red-700'
                       : 'border-slate-300 dark:border-slate-700'
                   }`}
                 />
                 {errors.price && (
-                  <p className="mt-1 text-xs font-medium text-red-600 dark:text-red-400">
+                  <p className="mt-0.5 text-xs font-medium text-red-600 dark:text-red-400">
                     {errors.price.message}
                   </p>
                 )}
@@ -388,7 +388,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                   <span>Estoque Operacional (unidades)</span>
                   <span className="text-red-500">*</span>
                 </label>
-                <div className="relative mt-1.5">
+                <div className="relative mt-1">
                   <input
                     id="product-stock"
                     type="number"
@@ -396,84 +396,87 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                     min="0"
                     placeholder="Ex: 25"
                     {...register('stockQuantity', { valueAsNumber: true })}
-                    className={`w-full rounded-xl border bg-white py-2.5 pr-12 pl-3.5 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 ${
+                    className={`w-full rounded-xl border bg-white py-2 pr-12 pl-3 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 ${
                       errors.stockQuantity
                         ? 'border-red-400 dark:border-red-700'
                         : 'border-slate-300 dark:border-slate-700'
                     }`}
                   />
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-xs font-semibold text-slate-500 dark:text-slate-400">
                     un.
                   </div>
                 </div>
                 {errors.stockQuantity && (
-                  <p className="mt-1 text-xs font-medium text-red-600 dark:text-red-400">
+                  <p className="mt-0.5 text-xs font-medium text-red-600 dark:text-red-400">
                     {errors.stockQuantity.message}
                   </p>
                 )}
               </div>
             </div>
 
-            {/* Grid Unidade + Imagem */}
-            <div>
-              <label htmlFor="product-unit" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Unidade de Medida
-              </label>
-              <input
-                id="product-unit"
-                type="text"
-                placeholder="Ex: Bobina 850 kg, Fardo 1.000 kg, Caixa c/ 2.500 folhas"
-                {...register('unit')}
-                className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400"
-              />
-            </div>
-
-            {/* URL da Imagem */}
-            <div>
-              <label htmlFor="product-image" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                URL da Imagem <span className="text-red-500">*</span>
-              </label>
-              <div className="relative mt-1.5">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500 dark:text-slate-400">
-                  <ImageIcon className="h-4 w-4" />
-                </div>
+            {/* Grid Unidade de Medida + URL da Imagem */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {/* Unidade de Medida */}
+              <div>
+                <label htmlFor="product-unit" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  Unidade de Medida
+                </label>
                 <input
-                  id="product-image"
-                  type="url"
-                  placeholder="https://images.unsplash.com/photo-..."
-                  {...register('imageUrl')}
-                  className={`w-full rounded-xl border bg-white py-2.5 pr-3.5 pl-10 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 ${
-                    errors.imageUrl
-                      ? 'border-red-400 dark:border-red-700'
-                      : 'border-slate-300 dark:border-slate-700'
-                  }`}
+                  id="product-unit"
+                  type="text"
+                  placeholder="Ex: Bobina 850 kg, Fardo 1.000 kg"
+                  {...register('unit')}
+                  className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400"
                 />
               </div>
-              {errors.imageUrl && (
-                <p className="mt-1 text-xs font-medium text-red-600 dark:text-red-400">
-                  {errors.imageUrl.message}
-                </p>
-              )}
+
+              {/* URL da Imagem */}
+              <div>
+                <label htmlFor="product-image" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  URL da Imagem <span className="text-red-500">*</span>
+                </label>
+                <div className="relative mt-1">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 dark:text-slate-400">
+                    <ImageIcon className="h-4 w-4" />
+                  </div>
+                  <input
+                    id="product-image"
+                    type="url"
+                    placeholder="https://images.unsplash.com/photo-..."
+                    {...register('imageUrl')}
+                    className={`w-full rounded-xl border bg-white py-2 pr-3 pl-9 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 ${
+                      errors.imageUrl
+                        ? 'border-red-400 dark:border-red-700'
+                        : 'border-slate-300 dark:border-slate-700'
+                    }`}
+                  />
+                </div>
+                {errors.imageUrl && (
+                  <p className="mt-0.5 text-xs font-medium text-red-600 dark:text-red-400">
+                    {errors.imageUrl.message}
+                  </p>
+                )}
+              </div>
             </div>
 
-            {/* Descrição */}
+            {/* Descrição Detalhada */}
             <div>
               <label htmlFor="product-description" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                 Descrição Detalhada <span className="text-red-500">*</span>
               </label>
               <textarea
                 id="product-description"
-                rows={3}
+                rows={2}
                 placeholder="Descreva as especificações técnicas, aplicações e procedência florestal/industrial do produto..."
                 {...register('description')}
-                className={`mt-1.5 w-full rounded-xl border bg-white p-3 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 ${
+                className={`mt-1 w-full rounded-xl border bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 ${
                   errors.description
                     ? 'border-red-400 dark:border-red-700'
                     : 'border-slate-300 dark:border-slate-700'
                 }`}
               />
               {errors.description && (
-                <p className="mt-1 text-xs font-medium text-red-600 dark:text-red-400">
+                <p className="mt-0.5 text-xs font-medium text-red-600 dark:text-red-400">
                   {errors.description.message}
                 </p>
               )}
@@ -481,19 +484,19 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
           </div>
 
           {/* Ações do Rodapé (Fixado na base) */}
-          <div className="flex shrink-0 items-center justify-end gap-3 border-t border-slate-100 bg-slate-50/80 px-5 py-3.5 sm:px-6 sm:py-4 backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
+          <div className="flex shrink-0 items-center justify-end gap-3 border-t border-slate-100 bg-slate-50/80 px-5 py-3 sm:px-6 backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
             <button
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="rounded-xl border border-slate-300 px-4 py-2.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus-visible:ring-offset-slate-900"
+              className="rounded-xl border border-slate-300 px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus-visible:ring-offset-slate-900"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-bold text-white shadow-md transition-all hover:bg-emerald-700 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:bg-emerald-500 dark:hover:bg-emerald-600 dark:focus-visible:ring-offset-slate-900"
+              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-xs font-bold text-white shadow-md transition-all hover:bg-emerald-700 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:bg-emerald-500 dark:hover:bg-emerald-600 dark:focus-visible:ring-offset-slate-900"
             >
               {isSubmitting ? (
                 <>
