@@ -11,9 +11,10 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { X, Plus, Loader2, CheckCircle2, AlertTriangle, Image as ImageIcon, Boxes } from 'lucide-react';
+import { X, Plus, CheckCircle2, AlertTriangle, Image as ImageIcon, Boxes } from 'lucide-react';
 import { Product, ProductCategory } from '@/types/product';
 import { useProductStore } from '@/store/useProductStore';
+import { Button } from '@/components/ui/Button';
 
 // Compatibilidade entre Zod v4 e @hookform/resolvers
 if (typeof Error !== 'undefined' && !('errors' in Error.prototype)) {
@@ -485,31 +486,28 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
           {/* Ações do Rodapé (Fixado na base) */}
           <div className="flex shrink-0 items-center justify-end gap-3 border-t border-slate-100 bg-slate-50/80 px-5 py-3 sm:px-6 backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/90">
-            <button
+            <Button
               type="button"
+              variant="secondary"
+              size="sm"
               onClick={onClose}
               disabled={isSubmitting}
-              className="rounded-xl border border-slate-300 px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus-visible:ring-offset-slate-900"
+              className="rounded-xl px-4 py-2 text-xs font-semibold"
             >
               Cancelar
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
-              disabled={isSubmitting}
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-xs font-bold text-white shadow-md transition-all hover:bg-emerald-700 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:bg-emerald-500 dark:hover:bg-emerald-600 dark:focus-visible:ring-offset-slate-900"
+              variant="primary"
+              size="sm"
+              isLoading={isSubmitting}
+              leftIcon={!isSubmitting ? <Plus className={`h-4 w-4 ${isEditing ? 'rotate-45' : ''}`} /> : undefined}
+              className="rounded-xl px-5 py-2 text-xs font-bold"
             >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>{isEditing ? 'Atualizando...' : 'Cadastrando...'}</span>
-                </>
-              ) : (
-                <>
-                  <Plus className={`h-4 w-4 ${isEditing ? 'rotate-45' : ''}`} />
-                  <span>{isEditing ? 'Salvar Alterações' : 'Salvar Produto'}</span>
-                </>
-              )}
-            </button>
+              {isSubmitting
+                ? (isEditing ? 'Atualizando...' : 'Cadastrando...')
+                : (isEditing ? 'Salvar Alterações' : 'Salvar Produto')}
+            </Button>
           </div>
         </form>
       </div>

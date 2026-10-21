@@ -10,7 +10,7 @@
 import React from 'react';
 import { Package, TrendingUp, AlertTriangle } from 'lucide-react';
 import { Product } from '@/types/product';
-import { formatCurrencyBRL } from '@/components/ProductCard';
+import { formatCurrencyBRL } from '@/utils/formatters';
 
 interface ProductMetricsProps {
   products: Product[];

@@ -11,7 +11,8 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { Pencil, Layers } from 'lucide-react';
 import { Product } from '@/types/product';
-import { CATEGORY_STYLES, formatCurrencyBRL, getStockStatus } from '@/components/ProductCard';
+import { formatCurrencyBRL } from '@/utils/formatters';
+import { CATEGORY_STYLES, getStockStatus } from '@/utils/productHelpers';
 
 interface ProductTableViewProps {
   products: Product[];

@@ -29,6 +29,7 @@ import {
   selectFilteredProducts,
   selectPriceRangeBounds,
 } from '@/store/useProductStore';
+import { Button } from '@/components/ui/Button';
 
 const ALL_CATEGORIES: (ProductCategory | 'ALL')[] = [
   'ALL',
@@ -340,15 +341,17 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
 
           {/* Botão de Limpar Filtros */}
           {hasActiveFilters && (
-            <button
+            <Button
               type="button"
+              variant="secondary"
+              size="sm"
               onClick={handleResetFilters}
               title="Restaurar filtros padrões"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700/60 dark:hover:text-white dark:focus-visible:ring-offset-slate-900"
+              leftIcon={<RotateCcw className="h-3.5 w-3.5" />}
+              className="py-2.5 rounded-xl text-slate-700 dark:text-slate-200"
             >
-              <RotateCcw className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Limpar</span>
-            </button>
+            </Button>
           )}
         </div>
       </div>
@@ -412,12 +415,14 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
                   onChange={(e) => setMaxPriceInput(e.target.value)}
                   className="w-20 sm:w-28 min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-2.5 py-1.5 text-xs text-slate-900 placeholder:text-slate-500 [appearance:textfield] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-400"
                 />
-                <button
+                <Button
                   type="submit"
-                  className="shrink-0 rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition-colors hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-600"
+                  variant="primary"
+                  size="sm"
+                  className="shrink-0 rounded-xl"
                 >
                   Filtrar
-                </button>
+                </Button>
               </div>
             </form>
 
