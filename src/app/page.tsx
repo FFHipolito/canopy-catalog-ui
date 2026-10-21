@@ -138,32 +138,32 @@ export default function CatalogPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/80 text-slate-900 transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50/80 text-slate-900 transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100">
       {/* Barra de Topo Corporativa */}
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/95">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-3 py-2.5 sm:px-6 lg:px-8 sm:py-3">
           {/* Logo e Nome da Plataforma */}
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-500/20">
-              <TreePine className="h-6 w-6" />
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-500/20">
+              <TreePine className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-base font-extrabold tracking-tight text-slate-900 dark:text-white">
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="text-sm sm:text-base font-extrabold tracking-tight text-slate-900 dark:text-white">
                   Canopy
                 </span>
-                <span className="rounded-md bg-emerald-100 px-1.5 py-0.5 text-[10px] font-bold text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300">
+                <span className="rounded-md bg-emerald-100 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-bold text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300">
                   ENTERPRISE
                 </span>
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-300">
+              <p className="hidden sm:block text-xs text-slate-600 dark:text-slate-300 truncate">
                 Catálogo Industrial de Produtos & Celulose
               </p>
             </div>
           </div>
 
           {/* Ações da Barra de Topo */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             {/* Seletor de Modo de Visualização: Catálogo vs Inventário */}
             <div
               role="group"
@@ -175,7 +175,7 @@ export default function CatalogPage() {
                 onClick={() => setViewMode('catalog')}
                 aria-pressed={viewMode === 'catalog'}
                 title="Modo Catálogo (Grelha de Cards)"
-                className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 ${
+                className={`inline-flex items-center gap-1.5 rounded-lg px-2 sm:px-2.5 py-1 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 ${
                   viewMode === 'catalog'
                     ? 'bg-white text-emerald-900 shadow-xs dark:bg-slate-900 dark:text-emerald-300'
                     : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
@@ -189,7 +189,7 @@ export default function CatalogPage() {
                 onClick={() => setViewMode('inventory')}
                 aria-pressed={viewMode === 'inventory'}
                 title="Modo Inventário (Tabela Compacta)"
-                className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 ${
+                className={`inline-flex items-center gap-1.5 rounded-lg px-2 sm:px-2.5 py-1 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 ${
                   viewMode === 'inventory'
                     ? 'bg-white text-emerald-900 shadow-xs dark:bg-slate-900 dark:text-emerald-300'
                     : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
@@ -212,7 +212,7 @@ export default function CatalogPage() {
                   : 'Mudar para Modo Escuro'
               }
               aria-label="Alternar tema claro ou escuro"
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700/60 dark:focus-visible:ring-offset-slate-900"
+              className="inline-flex h-9 w-9 sm:w-auto items-center justify-center gap-1.5 rounded-xl border border-slate-300 bg-white sm:px-3 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700/60 dark:focus-visible:ring-offset-slate-900"
             >
               {mounted && theme === 'dark' ? (
                 <>
@@ -231,17 +231,17 @@ export default function CatalogPage() {
             <button
               type="button"
               onClick={handleOpenNewProduct}
-              className="inline-flex h-9 items-center gap-2 rounded-xl bg-emerald-600 px-3.5 sm:px-4 text-xs font-bold text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:bg-emerald-500 dark:hover:bg-emerald-600 dark:focus-visible:ring-offset-slate-900"
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-2.5 sm:px-4 text-xs font-bold text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:bg-emerald-500 dark:hover:bg-emerald-600 dark:focus-visible:ring-offset-slate-900"
             >
               <Plus className="h-4 w-4" />
-              <span className="hidden xs:inline">Novo Produto</span>
+              <span className="hidden sm:inline">Novo Produto</span>
             </button>
           </div>
         </div>
       </header>
 
       {/* Conteúdo Principal */}
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto w-full max-w-7xl px-3 py-6 sm:px-6 lg:px-8 sm:py-8">
         {/* Banner de Boas-Vindas Original */}
         <section className="mb-6 rounded-3xl border border-zinc-200/80 bg-gradient-to-r from-emerald-900 via-teal-900 to-zinc-900 p-6 text-white shadow-xl sm:p-8 dark:border-zinc-800">
           <div className="max-w-3xl">

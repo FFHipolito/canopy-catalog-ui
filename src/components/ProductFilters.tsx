@@ -282,7 +282,7 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
               <div
                 role="listbox"
                 aria-labelledby="sort-menu-button"
-                className="absolute right-0 top-full mt-2 w-64 origin-top-right rounded-2xl border border-slate-200 bg-white p-1.5 shadow-xl shadow-slate-950/10 z-50 animate-in fade-in zoom-in-95 duration-150 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/60"
+                className="absolute right-0 top-full mt-2 w-64 max-w-[calc(100vw-2rem)] origin-top-right rounded-2xl border border-slate-200 bg-white p-1.5 shadow-xl shadow-slate-950/10 z-50 animate-in fade-in zoom-in-95 duration-150 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/60"
               >
                 <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 flex items-center gap-1.5 border-b border-slate-100 dark:border-slate-800 mb-1">
                   <ArrowUpDown className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
@@ -387,12 +387,12 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
           {/* Linha Inferior: Faixa de Preço + Toggle de Estoque + Resumo */}
           <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between border-t border-slate-100/60 dark:border-slate-800/60">
             {/* Faixa de Preço */}
-            <form onSubmit={handleApplyPrice} className="flex flex-wrap items-center gap-2">
-              <span className="flex items-center gap-1 text-xs font-bold text-slate-700 dark:text-slate-300">
+            <form onSubmit={handleApplyPrice} className="flex flex-wrap items-center gap-2 max-w-full">
+              <span className="flex items-center gap-1 text-xs font-bold text-slate-700 dark:text-slate-300 shrink-0">
                 <DollarSign className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400" />
                 Faixa de Preço (R$):
               </span>
-              <div className="flex items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-1.5 max-w-full">
                 <input
                   type="number"
                   min="0"
@@ -400,9 +400,9 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
                   placeholder={`Mín (R$ ${minPriceBound})`}
                   value={minPriceInput}
                   onChange={(e) => setMinPriceInput(e.target.value)}
-                  className="w-28 rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs text-slate-900 placeholder:text-slate-500 [appearance:textfield] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-400"
+                  className="w-20 sm:w-28 min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-2.5 py-1.5 text-xs text-slate-900 placeholder:text-slate-500 [appearance:textfield] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-400"
                 />
-                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">até</span>
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">até</span>
                 <input
                   type="number"
                   min="0"
@@ -410,11 +410,11 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({ defaultExpanded 
                   placeholder={`Máx (R$ ${maxPriceBound})`}
                   value={maxPriceInput}
                   onChange={(e) => setMaxPriceInput(e.target.value)}
-                  className="w-28 rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs text-slate-900 placeholder:text-slate-500 [appearance:textfield] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-400"
+                  className="w-20 sm:w-28 min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-2.5 py-1.5 text-xs text-slate-900 placeholder:text-slate-500 [appearance:textfield] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-400"
                 />
                 <button
                   type="submit"
-                  className="rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition-colors hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-600"
+                  className="shrink-0 rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition-colors hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-600"
                 >
                   Filtrar
                 </button>

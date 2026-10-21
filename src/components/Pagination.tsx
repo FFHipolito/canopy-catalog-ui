@@ -78,11 +78,11 @@ export const Pagination: React.FC = () => {
     <nav
       role="navigation"
       aria-label="Paginação de produtos"
-      className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-6 sm:flex-row dark:border-slate-800"
+      className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-6 sm:flex-row dark:border-slate-800 max-w-full"
     >
       {/* Indicador de Itens e Seletor de PageSize */}
-      <div className="flex items-center gap-3 text-xs text-slate-600 dark:text-slate-300">
-        <span>
+      <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-3 text-xs text-slate-600 dark:text-slate-300">
+        <span className="text-center sm:text-left">
           Mostrando <strong className="font-semibold text-slate-900 dark:text-slate-100">{startItemIndex}</strong> a{' '}
           <strong className="font-semibold text-slate-900 dark:text-slate-100">{endItemIndex}</strong> de{' '}
           <strong className="font-semibold text-slate-900 dark:text-slate-100">{totalItems}</strong> produtos
@@ -106,7 +106,7 @@ export const Pagination: React.FC = () => {
       </div>
 
       {/* Controles de Navegação Numérica */}
-      <div className="flex items-center gap-1">
+      <div className="flex flex-wrap items-center justify-center gap-1 max-w-full">
         {/* Botão Anterior */}
         <button
           type="button"

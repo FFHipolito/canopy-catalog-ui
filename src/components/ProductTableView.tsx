@@ -23,7 +23,7 @@ export const ProductTableView: React.FC<ProductTableViewProps> = ({
   onEdit,
 }) => {
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs dark:border-slate-800 dark:bg-slate-900">
+    <div className="w-full overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-xs dark:border-slate-800 dark:bg-slate-900">
       <table className="w-full border-collapse text-left text-xs sm:text-sm">
         <thead>
           <tr className="border-b border-slate-200 bg-slate-50/90 text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:border-slate-800 dark:bg-slate-800/80 dark:text-slate-300">
