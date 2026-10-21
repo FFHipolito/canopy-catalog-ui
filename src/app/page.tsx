@@ -117,7 +117,7 @@ export default function CatalogPage() {
       if (e.key === 'Escape') {
         if (isModalOpen) {
           setIsModalOpen(false);
-        } else if (filterCriteria.searchQuery) {
+        } else if (useProductStore.getState().filterCriteria.searchQuery) {
           useProductStore.getState().setSearchQuery('');
         }
       }

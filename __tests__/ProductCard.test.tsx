@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ProductCard } from '@/components/ProductCard';
 import { Product } from '@/types/product';
 
@@ -56,7 +56,35 @@ describe('ProductCard Component', () => {
     expect(screen.getByText('Imagem indisponível')).toBeInTheDocument();
   });
 
-  // 4. Teste de expansão da descrição ao clicar em 'mais'
+  // 4. Teste de onLoad da imagem
+  it('deve remover estado de loading ao disparar evento de onLoad na imagem', async () => {
+    render(<ProductCard product={mockProduct} />);
+    const imageElement = screen.getByAltText(mockProduct.name);
+    fireEvent.load(imageElement);
+    await waitFor(() => {
+      expect(imageElement).toHaveClass('opacity-100');
+    });
+  });
+
+  // 5. Teste de Estoque Baixo
+  it('deve renderizar status Estoque Baixo quando quantidade for entre 1 e 4', () => {
+    render(<ProductCard product={{ ...mockProduct, stockQuantity: 2 }} />);
+    expect(screen.getByText('Estoque Baixo (2 un.)')).toBeInTheDocument();
+  });
+
+  // 6. Teste de Esgotado
+  it('deve renderizar status Esgotado quando estoque for 0 ou inStock for false', () => {
+    render(<ProductCard product={{ ...mockProduct, stockQuantity: 0, inStock: false }} />);
+    expect(screen.getByText('Esgotado')).toBeInTheDocument();
+  });
+
+  // 7. Teste de produto sem imagem
+  it('deve exibir fallback quando imageUrl for vazio', () => {
+    render(<ProductCard product={{ ...mockProduct, imageUrl: '' }} />);
+    expect(screen.getByText('Imagem indisponível')).toBeInTheDocument();
+  });
+
+  // 8. Teste de expansão da descrição ao clicar em 'mais'
   it('deve alternar entre mais e menos ao clicar no botão de descrição', () => {
     render(<ProductCard product={mockProduct} />);
 
@@ -70,7 +98,7 @@ describe('ProductCard Component', () => {
     expect(screen.getByRole('button', { name: /mais/i })).toBeInTheDocument();
   });
 
-  // 5. Teste de clique no botão Atualizar
+  // 9. Teste de clique no botão Atualizar
   it('deve disparar onEdit ao clicar no botão Atualizar do card', () => {
     const handleEdit = jest.fn();
     render(<ProductCard product={mockProduct} onEdit={handleEdit} />);

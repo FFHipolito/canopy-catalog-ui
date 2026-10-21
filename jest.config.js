@@ -14,6 +14,11 @@ const customJestConfig = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!src/types/**',
+    '!src/app/layout.tsx',
+  ],
 };
 
 module.exports = createJestConfig(customJestConfig);

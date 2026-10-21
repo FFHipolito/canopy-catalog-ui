@@ -184,4 +184,54 @@ describe('ProductFilters Component', () => {
     await user.click(stockSwitch);
     expect(useProductStore.getState().filterCriteria.onlyInStock).toBe(false);
   });
+
+  it('deve limpar o campo de busca ao clicar no botão X', async () => {
+    const user = userEvent.setup();
+    render(<ProductFilters />);
+
+    const searchInput = screen.getByRole('searchbox');
+    await user.type(searchInput, 'texto de teste');
+    expect(searchInput).toHaveValue('texto de teste');
+
+    const clearButton = screen.getByLabelText(/Limpar campo de busca/i);
+    await user.click(clearButton);
+
+    expect(searchInput).toHaveValue('');
+    expect(useProductStore.getState().filterCriteria.searchQuery).toBe('');
+  });
+
+  it('deve filtrar por faixa de preço ao preencher os inputs e submeter', async () => {
+    const user = userEvent.setup();
+    render(<ProductFilters defaultExpanded={true} />);
+
+    const minInput = screen.getByPlaceholderText(/Mín/i);
+    const maxInput = screen.getByPlaceholderText(/Máx/i);
+
+    await user.type(minInput, '100');
+    await user.type(maxInput, '3000');
+
+    const filterButton = screen.getByRole('button', { name: /^Filtrar$/i });
+    await user.click(filterButton);
+
+    expect(useProductStore.getState().filterCriteria.minPrice).toBe(100);
+    expect(useProductStore.getState().filterCriteria.maxPrice).toBe(3000);
+  });
+
+  it('deve fechar o menu de ordenação ao clicar fora dele', async () => {
+    const user = userEvent.setup();
+    render(
+      <div>
+        <div data-testid="outside-element">Elemento Fora</div>
+        <ProductFilters />
+      </div>
+    );
+
+    const sortButton = screen.getByRole('button', { name: /Ordenar produtos: Nome \(A a Z\)/i });
+    await user.click(sortButton);
+
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+    await user.click(screen.getByTestId('outside-element'));
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
 });

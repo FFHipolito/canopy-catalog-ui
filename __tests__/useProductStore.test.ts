@@ -2,6 +2,8 @@ import {
   createProductStore,
   selectPaginatedProducts,
   selectPaginationInfo,
+  selectPriceRangeBounds,
+  selectAvailableCategories,
 } from '@/store/useProductStore';
 import { IProductService } from '@/services/productService';
 import { Product } from '@/types/product';
@@ -117,5 +119,147 @@ describe('useProductStore & Computed Selectors', () => {
 
     const page1Items = selectPaginatedProducts(store.getState());
     expect(page1Items).toHaveLength(1);
+  });
+
+  it('deve atualizar critérios de filtro e resetar filtros', () => {
+    const store = createProductStore(mockService);
+
+    store.getState().setSearchQuery('papel');
+    expect(store.getState().filterCriteria.searchQuery).toBe('papel');
+    expect(store.getState().currentPage).toBe(1);
+
+    store.getState().setCategory('Celulose');
+    expect(store.getState().filterCriteria.category).toBe('Celulose');
+
+    store.getState().setPriceRange(100, 500);
+    expect(store.getState().filterCriteria.minPrice).toBe(100);
+    expect(store.getState().filterCriteria.maxPrice).toBe(500);
+
+    store.getState().setSort('price-desc');
+    expect(store.getState().filterCriteria.sort).toBe('price-desc');
+
+    store.getState().setOnlyInStock(true);
+    expect(store.getState().filterCriteria.onlyInStock).toBe(true);
+
+    store.getState().setCurrentPage(3);
+    expect(store.getState().currentPage).toBe(3);
+
+    store.getState().resetFilters();
+    expect(store.getState().filterCriteria.searchQuery).toBe('');
+    expect(store.getState().filterCriteria.category).toBe('ALL');
+    expect(store.getState().filterCriteria.minPrice).toBeNull();
+    expect(store.getState().filterCriteria.maxPrice).toBeNull();
+    expect(store.getState().filterCriteria.sort).toBe('name-asc');
+    expect(store.getState().filterCriteria.onlyInStock).toBe(false);
+  });
+
+  it('deve tratar erros em fetchProducts, addProduct e updateProduct', async () => {
+    const failingService: IProductService = {
+      ...mockService,
+      fetchProducts: jest.fn().mockRejectedValue(new Error('Erro ao carregar')),
+      createProduct: jest.fn().mockRejectedValue(new Error('Erro ao criar')),
+      updateProduct: jest.fn().mockRejectedValue(new Error('Erro ao atualizar')),
+    };
+
+    const store = createProductStore(failingService);
+
+    await store.getState().fetchProducts();
+    expect(store.getState().error).toBe('Erro ao carregar');
+    expect(store.getState().isLoading).toBe(false);
+
+    await expect(
+      store.getState().addProduct({
+        name: 'Item Falha',
+        category: 'Celulose',
+        price: 100,
+        description: 'Descrição',
+        imageUrl: '',
+      })
+    ).rejects.toThrow('Erro ao criar');
+    expect(store.getState().error).toBe('Erro ao criar');
+
+    await expect(
+      store.getState().updateProduct('prod-1', { name: 'Falha Update' })
+    ).rejects.toThrow('Erro ao atualizar');
+    expect(store.getState().error).toBe('Erro ao atualizar');
+
+    // Testar com erros que não são instâncias de Error
+    const stringFailingService: IProductService = {
+      ...mockService,
+      fetchProducts: jest.fn().mockRejectedValue('Falha string'),
+      createProduct: jest.fn().mockRejectedValue('Falha string'),
+      updateProduct: jest.fn().mockRejectedValue('Falha string'),
+    };
+    const store2 = createProductStore(stringFailingService);
+    await store2.getState().fetchProducts();
+    expect(store2.getState().error).toBe('Falha ao carregar catálogo de produtos');
+
+    await expect(
+      store2.getState().addProduct({
+        name: 'Item',
+        category: 'Celulose',
+        price: 10,
+        description: 'Desc',
+        imageUrl: '',
+      })
+    ).rejects.toBe('Falha string');
+    expect(store2.getState().error).toBe('Erro ao cadastrar produto');
+
+    await expect(
+      store2.getState().updateProduct('prod-1', { name: 'Item' })
+    ).rejects.toBe('Falha string');
+    expect(store2.getState().error).toBe('Erro ao atualizar produto');
+  });
+
+  it('deve lidar com setPriceRange com parâmetros undefined/null e paginação', () => {
+    const store = createProductStore(mockService);
+    store.getState().setPriceRange(undefined, undefined);
+    expect(store.getState().filterCriteria.minPrice).toBeNull();
+    expect(store.getState().filterCriteria.maxPrice).toBeNull();
+
+    store.getState().setPageSize(20);
+    expect(store.getState().pageSize).toBe(20);
+    expect(store.getState().currentPage).toBe(1);
+  });
+
+  it('deve retornar do cache quando selectPaginatedProducts e selectPaginationInfo forem chamados repetidamente com o mesmo estado', () => {
+    const store = createProductStore(mockService);
+    store.setState({ products: mockProducts });
+
+    const paginated1 = selectPaginatedProducts(store.getState());
+    const paginated2 = selectPaginatedProducts(store.getState());
+    expect(paginated1).toBe(paginated2);
+
+    const info1 = selectPaginationInfo(store.getState());
+    const info2 = selectPaginationInfo(store.getState());
+    expect(info1).toBe(info2);
+  });
+
+  it('deve calcular e cachear limites de preço com selectPriceRangeBounds', () => {
+    const store = createProductStore(mockService);
+
+    // Estado vazio
+    store.setState({ products: [] });
+    const emptyBounds = selectPriceRangeBounds(store.getState());
+    expect(emptyBounds).toEqual({ min: 0, max: 10000 });
+
+    // Com produtos
+    store.setState({ products: mockProducts });
+    const bounds1 = selectPriceRangeBounds(store.getState());
+    expect(bounds1).toEqual({ min: 32, max: 9500 });
+
+    // Cache hit
+    const bounds2 = selectPriceRangeBounds(store.getState());
+    expect(bounds2).toBe(bounds1);
+  });
+
+  it('deve listar categorias únicas com selectAvailableCategories', () => {
+    const store = createProductStore(mockService);
+    store.setState({ products: mockProducts });
+
+    const categories = selectAvailableCategories(store.getState());
+    expect(categories).toContain('Papéis de Imprimir e Escrever');
+    expect(categories).toContain('Bioprodutos e Inovação');
+    expect(categories.length).toBe(2);
   });
 });

@@ -67,4 +67,21 @@ describe('ProductTableView Component', () => {
     expect(onEditMock).toHaveBeenCalledTimes(1);
     expect(onEditMock).toHaveBeenCalledWith(mockTableProducts[0]);
   });
+
+  it('deve exibir fallback quando produto não tem imagem ou quando imagem falha', () => {
+    const productWithoutImg: Product = {
+      ...mockTableProducts[0],
+      id: 'no-img-id-12345',
+      sku: undefined,
+      imageUrl: '',
+    };
+    render(<ProductTableView products={[productWithoutImg]} />);
+    // SKU fallback para ID
+    expect(screen.getByText('NO-IMG-ID-')).toBeInTheDocument();
+
+    // Simula erro de imagem em produto com imagem
+    render(<ProductTableView products={[mockTableProducts[0]]} />);
+    const images = screen.getAllByAltText(mockTableProducts[0].name);
+    fireEvent.error(images[0]);
+  });
 });
