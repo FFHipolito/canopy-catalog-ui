@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { X, Plus, Loader2, CheckCircle2, AlertTriangle, Image as ImageIcon } from 'lucide-react';
+import { X, Plus, Loader2, CheckCircle2, AlertTriangle, Image as ImageIcon, Boxes } from 'lucide-react';
 import { Product, ProductCategory } from '@/types/product';
 import { useProductStore } from '@/store/useProductStore';
 
@@ -174,6 +174,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
           category: data.category,
           price: Number(data.price),
           stockQuantity: stock,
+          inStock: stock > 0,
           description: data.description.trim(),
           imageUrl: data.imageUrl.trim(),
           sku: data.sku ? data.sku.trim().toUpperCase() : undefined,
@@ -190,6 +191,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
           category: data.category,
           price: Number(data.price),
           stockQuantity: stock,
+          inStock: stock > 0,
           description: data.description.trim(),
           imageUrl: data.imageUrl.trim(),
           sku: data.sku ? data.sku.trim().toUpperCase() : undefined,
@@ -378,22 +380,32 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
               {/* Quantidade em Estoque */}
               <div>
-                <label htmlFor="product-stock" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                  Estoque Operacional (unidades)
+                <label
+                  htmlFor="product-stock"
+                  className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300"
+                >
+                  <Boxes className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span>Estoque Operacional (unidades)</span>
+                  <span className="text-red-500">*</span>
                 </label>
-                <input
-                  id="product-stock"
-                  type="number"
-                  step="1"
-                  min="0"
-                  placeholder="Ex: 25"
-                  {...register('stockQuantity', { valueAsNumber: true })}
-                  className={`mt-1.5 w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 ${
-                    errors.stockQuantity
-                      ? 'border-red-400 dark:border-red-700'
-                      : 'border-slate-300 dark:border-slate-700'
-                  }`}
-                />
+                <div className="relative mt-1.5">
+                  <input
+                    id="product-stock"
+                    type="number"
+                    step="1"
+                    min="0"
+                    placeholder="Ex: 25"
+                    {...register('stockQuantity', { valueAsNumber: true })}
+                    className={`w-full rounded-xl border bg-white py-2.5 pr-12 pl-3.5 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 ${
+                      errors.stockQuantity
+                        ? 'border-red-400 dark:border-red-700'
+                        : 'border-slate-300 dark:border-slate-700'
+                    }`}
+                  />
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                    un.
+                  </div>
+                </div>
                 {errors.stockQuantity && (
                   <p className="mt-1 text-xs font-medium text-red-600 dark:text-red-400">
                     {errors.stockQuantity.message}
