@@ -27,6 +27,8 @@
    - [Desacoplamento de Serviço e Inversão de Dependência](#24-desacoplamento-de-serviço-e-inversão-de-dependência)
    - [Prevenção de Cumulative Layout Shift (CLS)](#25-zero-cls-cumulative-layout-shift-com-skeletons-idênticos)
    - [Performance de Busca com Debounce & Seletores Primitivos](#26-performance-busca-com-debounce-e-seletores-atômicos)
+   - [Design System: Tokens de Tema Light/Dark e Componente Button](#27-design-system-tokens-de-tema-lightdark-e-componente-button)
+   - [Camada de Utilitários Puros e Desacoplamento](#28-camada-de-utilitários-puros-e-desacoplamento-srcutils)
 3. [Guia Passo a Passo de Execução](#-3-guia-passo-a-passo-de-execução)
    - [Instalação](#31-instalação)
    - [Execução em Desenvolvimento](#32-execução-em-modo-de-desenvolvimento)
@@ -92,18 +94,22 @@ Projetada sob os alicerces da **Clean Architecture**, **Domain-Driven Design (DD
 canopy-catalog-ui/
 ├── __tests__/                     # Suíte de testes automatizados com Jest e RTL
 │   ├── __snapshots__/             # Snapshots estruturais da interface
+│   ├── Button.test.tsx            # Teste de variantes, tamanhos e acessibilidade do Button
 │   ├── ProductCard.test.tsx       # Teste de Snapshot e renderização de propriedades
 │   ├── ProductFilters.test.tsx    # Teste de debounce, busca e reset de filtros
 │   ├── ProductFormModal.test.tsx  # Teste de validação reativa Zod e cadastro
-│   └── useProductStore.test.ts    # Testes unitários de store e seletores puros
+│   ├── useProductStore.test.ts    # Testes unitários de store e seletores puros
+│   └── utils.test.ts              # Testes de formatadores e helpers de produtos
 ├── rascunho/                      # Diretório local ignorado pelo Git (.gitignore)
 │   └── explicacoes_tecnicas.md    # Registro aprofundado das decisões de cada etapa
 ├── src/
 │   ├── app/                       # Next.js App Router (Layout e Page Principal)
-│   │   ├── globals.css            # Diretivas do Tailwind CSS e temas
+│   │   ├── globals.css            # Diretivas Tailwind v4, tokens de tema light/dark
 │   │   ├── layout.tsx             # Root Layout corporativo com metadados SEO
 │   │   └── page.tsx               # Orquestrador principal da tela de catálogo
 │   ├── components/                # Componentes de UI modulares e desacoplados
+│   │   ├── ui/                    # Componentes atômicos e primitivos de interface
+│   │   │   └── Button.tsx         # Botão reutilizável com variantes semânticas e loading
 │   │   ├── Pagination.tsx         # Navegação de páginas acessível e configurável
 │   │   ├── ProductCard.tsx        # Card de produto com otimização Next/Image e BRL
 │   │   ├── ProductFilters.tsx     # Filtros com debounce, range de preço e ordenação
@@ -114,8 +120,11 @@ canopy-catalog-ui/
 │   │   └── productService.ts      # Implementação da classe ProductService
 │   ├── store/                     # Gerenciamento de estado global reativo
 │   │   └── useProductStore.ts     # Store Zustand, actions e computed selectors
-│   └── types/                     # Modelagem estrita de domínio (TypeScript)
-│       └── product.ts             # Interfaces de Produto, Filtros e Paginação
+│   ├── types/                     # Modelagem estrita de domínio (TypeScript)
+│   │   └── product.ts             # Interfaces de Produto, Filtros e Paginação
+│   └── utils/                     # Funções utilitárias puras e helpers reutilizáveis
+│       ├── formatters.ts          # Formatação de moeda BRL e números
+│       └── productHelpers.ts      # Status de estoque e estilos de categorias
 ├── jest.config.js                 # Configuração do Jest integrada ao next/jest
 ├── jest.setup.js                  # Setup do RTL e polyfills de compatibilidade
 ├── package.json                   # Dependências e scripts de execução
@@ -178,6 +187,14 @@ canopy-catalog-ui/
 ### 2.6. Performance: Busca com Debounce e Seletores Atômicos
 - **Debounce de 300ms:** O usuário pode digitar livremente no campo de busca com retorno visual instantâneo no input local. Apenas após 300ms de inatividade na digitação, a store global dispara a filtragem, preservando a CPU e a thread de renderização.
 - **Seletores Primitivos:** Para contadores e limites (`filteredCount`, `minPriceBound`, `maxPriceBound`), a store expõe valores primitivos (`number`). O Zustand utiliza igualdade por valor (`Object.is`), prevenindo loops infinitos de renderização causados por referências de objetos recriadas a cada ciclo.
+
+### 2.7. Design System: Tokens de Tema Light/Dark e Componente Button
+- **Tokens Semânticos Centralizados (`globals.css`):** Em vez de repetir dezenas de classes atômicas (`bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800`), definimos tokens em `:root` e `.dark` (`--card`, `--border`, `--muted`, `--input-bg`) expostos via `@theme inline` do Tailwind v4 e classes como `.theme-card`. A alteração do tema visual ocorre em um único arquivo.
+- **Componente `Button` Reutilizável (`src/components/ui/Button.tsx`):** Elimina a duplicação de tags `<button>` nativas, encapsulando variantes semânticas (`primary`, `secondary`, `outline`, `ghost`, `danger`), tamanhos padronizados (`sm`, `md`, `lg`, `icon`), anéis de foco WCAG AA e estado de carregamento (`isLoading` com spinner animado).
+
+### 2.8. Camada de Utilitários Puros e Desacoplamento (`src/utils/`)
+- **Separação de Responsabilidades (SoC):** As funções puras de formatação (`formatCurrencyBRL`, `formatNumberBR`) e helpers de produtos (`getStockStatus`, `CATEGORY_STYLES`) foram extraídas de dentro de componentes de apresentação para módulos isolados em `src/utils/`.
+- **Testabilidade Pura e Manutenibilidade:** Componentes como `ProductTableView` e `ProductMetrics` consomem utilitários diretamente, sem acoplamento indireto com `ProductCard`, facilitando testes unitários rápidos e sem dependências visuais.
 
 ---
 
